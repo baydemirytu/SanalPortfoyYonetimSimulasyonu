@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "306698546908",
+    "project_id": "sanalportfoyyonetimsimulasyonu",
+    "storage_bucket": "sanalportfoyyonetimsimulasyonu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306698546908:android:2b672e30f96b7e36488e19",
+        "android_client_info": {
+          "package_name": "com.example.sanal_portfoy_yonetim_simulasyonu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "306698546908-n80cdbphb4vpi023k2irdl2c1vu0f6r3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1P4UwbpUWtCqMmFnZiKGIoJBmGziV0Ck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "306698546908-n80cdbphb4vpi023k2irdl2c1vu0f6r3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
