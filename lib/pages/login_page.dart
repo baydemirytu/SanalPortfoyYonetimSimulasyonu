@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/custom_text_field.dart';
+
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
   const LoginPage({Key? key, required this.showRegisterPage}) : super(key: key);
@@ -36,8 +38,16 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextField(controller: mailController),
-              TextField(controller: passwordController),
+              CustomTextField(
+                  controller: mailController,
+                  text: 'Enter your email',
+                  icon: const Icon(Icons.email)),
+              const SizedBox(height: 10),
+              CustomTextField(
+                  controller: passwordController,
+                  text: 'Enter your password',
+                  icon: const Icon(Icons.password)),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   signIn();
@@ -46,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               GestureDetector(
                 onTap: widget.showRegisterPage,
-                child: const Text('Register'),
+                child: const Text('Register!'),
               ),
             ],
           ),
