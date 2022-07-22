@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/custom_text_field.dart';
+import 'forgot_pw_page.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showRegisterPage;
@@ -54,9 +55,31 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 child: const Text('Sign In'),
               ),
+              const SizedBox(height: 10),
               GestureDetector(
                 onTap: widget.showRegisterPage,
-                child: const Text('Register!'),
+                child: const Text(
+                  'Register!',
+                  style: TextStyle(color: Colors.blue),
+                ),
+              ),
+              const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const ForgotPasswordPage();
+                      },
+                    ),
+                  );
+                },
+                child: const Text(
+                  "Forgot Password?",
+                  style: TextStyle(
+                      color: Colors.blue, fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),
