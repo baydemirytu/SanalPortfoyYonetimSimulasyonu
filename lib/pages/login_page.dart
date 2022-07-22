@@ -2,7 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  final VoidCallback showRegisterPage;
+  const LoginPage({Key? key, required this.showRegisterPage}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -20,6 +21,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void dispose() {
+    mailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -28,17 +36,17 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextField(
-                controller: mailController,
-              ),
-              TextField(
-                controller: passwordController,
-              ),
+              TextField(controller: mailController),
+              TextField(controller: passwordController),
               ElevatedButton(
                 onPressed: () {
                   signIn();
                 },
-                child: const Text('Press'),
+                child: const Text('Sign In'),
+              ),
+              GestureDetector(
+                onTap: widget.showRegisterPage,
+                child: const Text('Register'),
               ),
             ],
           ),
