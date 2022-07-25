@@ -1,36 +1,38 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
-import 'package:sanal_portfoy_yonetim_simulasyonu/pages/register_page.dart';
+import 'login_page.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/constants/functions/customShowDialog.dart'
+    as CSD;
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
+  var rememberValue = false;
+
   final TextEditingController mailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  @override
-  void dispose() {
-    mailController.dispose();
-    passwordController.dispose();
-
-    super.dispose();
+  Future signUp() async {
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: mailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+      CSD.CustomShowDialog.showDialog(
+          "User created and verification email sent to ${mailController.text.trim()}. Do not forget to check spam folder!");
+    } on FirebaseAuthException catch (e) {
+      CSD.CustomShowDialog.showDialog(e.message.toString());
+    }
   }
-
-  Future signIn() async {
-    FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: mailController.text.trim(),
-      password: passwordController.text.trim(),
-    );
-  }
-
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +46,16 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text('Sign in', style: Theme.of(context).textTheme.headline2),
-                const SizedBox(height: 60),
+                const Text(
+                  'Sign up',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40,
+                  ),
+                ),
+                const SizedBox(
+                  height: 60,
+                ),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -55,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                             ? null
                             : "Please enter a valid email",
                         maxLines: 1,
+                        controller: mailController,
                         decoration: InputDecoration(
                           hintText: 'Enter your email',
                           prefixIcon: const Icon(Icons.email),
@@ -62,9 +73,10 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                        controller: mailController,
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       TextFormField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -73,31 +85,30 @@ class _LoginPageState extends State<LoginPage> {
                           return null;
                         },
                         maxLines: 1,
+                        controller: passwordController,
                         obscureText: true,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.key),
                           hintText: 'Enter your password',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Colors.redAccent,
-                              width: 3,
-                            ),
                           ),
                         ),
-                        controller: passwordController,
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       ElevatedButton(
                         onPressed: () {
-                          signIn();
-                          if (_formKey.currentState!.validate()) {}
+                          if (_formKey.currentState!.validate()) {
+                            signUp();
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
                         ),
                         child: const Text(
-                          'Sign in',
+                          'Sign up',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
@@ -109,17 +120,17 @@ class _LoginPageState extends State<LoginPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Not registered yet?'),
+                          const Text('Already registered?'),
                           TextButton(
                             onPressed: () {
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const RegisterPage(),
+                                  builder: (context) => const LoginPage(),
                                 ),
                               );
                             },
-                            child: const Text('Create an account'),
+                            child: const Text('Sign in'),
                           ),
                         ],
                       ),

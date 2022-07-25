@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'authentication_page.dart';
-import 'home_page.dart';
+import '../home_page.dart';
+import 'login_page.dart';
 
 class MainPage extends StatelessWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -17,7 +18,11 @@ class MainPage extends StatelessWidget {
           } else if (snapshot.hasError) {
             return const Center(child: Text('Something went wrong.'));
           } else if (snapshot.hasData) {
-            return const HomePage();
+            if (FirebaseAuth.instance.currentUser!.emailVerified) {
+              return const HomePage();
+            } else {
+              return const LoginPage();
+            }
           } else {
             return const AuthenticationPage();
           }

@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/constants/functions/customShowDialog.dart'
+    as CSD;
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -16,19 +18,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: mailController.text.trim());
 
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text("Email sent to ${mailController.text.trim()}"),
-            );
-          });
+      CSD.CustomShowDialog.showDialog(
+          "Email sent to ${mailController.text.trim()}");
     } on FirebaseAuthException catch (e) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(content: Text(e.message.toString()));
-          });
+      CSD.CustomShowDialog.showDialog(e.message.toString());
     }
   }
 
@@ -62,8 +55,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              resetPassword();
+            onPressed: () async {
+              await resetPassword();
             },
             child: const Text(
               'Send Reset Email',

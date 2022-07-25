@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/register_page.dart';
 import 'login_page.dart';
-import 'register_page.dart';
 
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({Key? key}) : super(key: key);
