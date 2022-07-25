@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,6 +15,14 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController mailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
+  @override
+  void dispose() {
+    mailController.dispose();
+    passwordController.dispose();
+
+    super.dispose();
+  }
+
   Future signIn() async {
     FirebaseAuth.instance.signInWithEmailAndPassword(
       email: mailController.text.trim(),
@@ -22,7 +31,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   final _formKey = GlobalKey<FormState>();
-  var rememberValue = false;
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +44,8 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                const Text(
-                  'Sign in',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 40,
-                  ),
-                ),
-                const SizedBox(
-                  height: 60,
-                ),
+                Text('Sign in', style: Theme.of(context).textTheme.headline2),
+                const SizedBox(height: 60),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -64,9 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         controller: mailController,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       TextFormField(
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -80,20 +78,18 @@ class _LoginPageState extends State<LoginPage> {
                           prefixIcon: const Icon(Icons.key),
                           hintText: 'Enter your password',
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(
-                                color: Colors.redAccent,
-                                width: 3,
-                              )),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(
+                              color: Colors.redAccent,
+                              width: 3,
+                            ),
+                          ),
                         ),
                         controller: passwordController,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
-                          print("Press");
                           signIn();
                           if (_formKey.currentState!.validate()) {}
                         },
