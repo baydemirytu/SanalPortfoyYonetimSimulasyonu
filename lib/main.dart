@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/constants.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/main_page.dart';
 import 'firebase_options.dart';
 
@@ -16,9 +17,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainPage(),
+      home: const MainPage(),
+      theme: ThemeData(
+        colorScheme: darkTheme,
+        primarySwatch: Colors.blue,
+      ),
     );
   }
 }

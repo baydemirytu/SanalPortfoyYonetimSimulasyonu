@@ -1,12 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-
-import '../widgets/custom_text_field.dart';
-import 'forgot_pw_page.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/register_page.dart';
 
 class LoginPage extends StatefulWidget {
-  final VoidCallback showRegisterPage;
-  const LoginPage({Key? key, required this.showRegisterPage}) : super(key: key);
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -23,65 +21,117 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  @override
-  void dispose() {
-    mailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
+  final _formKey = GlobalKey<FormState>();
+  var rememberValue = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomTextField(
-                  controller: mailController,
-                  text: 'Enter your email',
-                  icon: const Icon(Icons.email)),
-              const SizedBox(height: 10),
-              CustomTextField(
-                  controller: passwordController,
-                  text: 'Enter your password',
-                  icon: const Icon(Icons.password)),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  signIn();
-                },
-                child: const Text('Sign In'),
-              ),
-              const SizedBox(height: 10),
-              GestureDetector(
-                onTap: widget.showRegisterPage,
-                child: const Text(
-                  'Register!',
-                  style: TextStyle(color: Colors.blue),
-                ),
-              ),
-              const SizedBox(height: 10),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const ForgotPasswordPage();
-                      },
-                    ),
-                  );
-                },
-                child: const Text(
-                  "Forgot Password?",
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                const Text(
+                  'Sign in',
                   style: TextStyle(
-                      color: Colors.blue, fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40,
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(
+                  height: 60,
+                ),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        validator: (value) => EmailValidator.validate(value!)
+                            ? null
+                            : "Please enter a valid email",
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                          hintText: 'Enter your email',
+                          prefixIcon: const Icon(Icons.email),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        controller: mailController,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
+                        maxLines: 1,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.key),
+                          hintText: 'Enter your password',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                color: Colors.redAccent,
+                                width: 3,
+                              )),
+                        ),
+                        controller: passwordController,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          print("Press");
+                          signIn();
+                          if (_formKey.currentState!.validate()) {}
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.fromLTRB(40, 15, 40, 15),
+                        ),
+                        child: const Text(
+                          'Sign in',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text('Not registered yet?'),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RegisterPage(),
+                                ),
+                              );
+                            },
+                            child: const Text('Create an account'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
