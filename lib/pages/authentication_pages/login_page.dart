@@ -1,12 +1,9 @@
-import 'dart:math';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/register_page.dart';
-import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/constants/functions/customShowDialog.dart'
-    as CSD;
+    as csd;
 
 import 'forgot_pw_page.dart';
 
@@ -37,10 +34,10 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (!FirebaseAuth.instance.currentUser!.emailVerified) {
-        CSD.CustomShowDialog.showDialog("Please verify your email first!");
+        csd.CustomShowDialog.showDialog("Please verify your email first!");
       }
     } on FirebaseAuthException catch (e) {
-      CSD.CustomShowDialog.showDialog(e.message.toString());
+      csd.CustomShowDialog.showDialog(e.message.toString());
     }
   }
 

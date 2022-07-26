@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:sanal_portfoy_yonetim_simulasyonu/constants/constantThemes.dart';
-import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/main_page.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/intro_page.dart';
+import 'constants/constantThemes.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const MainPage(),
+      home: const IntroductionPage(),
       theme: ThemeData(colorScheme: darkTheme),
     );
   }
