@@ -19,9 +19,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           .sendPasswordResetEmail(email: mailController.text.trim());
 
       CSD.CustomShowDialog.showDialog(
-          "Email sent to ${mailController.text.trim()}");
+          context, "Email sent to ${mailController.text.trim()}");
     } on FirebaseAuthException catch (e) {
-      CSD.CustomShowDialog.showDialog(e.message.toString());
+      CSD.CustomShowDialog.showDialog(context, e.message.toString());
     }
   }
 
