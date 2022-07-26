@@ -37,6 +37,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(elevation: 0),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         child: SafeArea(
@@ -116,23 +117,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       const SizedBox(
                         height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text('Already registered?'),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginPage(),
-                                ),
-                              );
-                            },
-                            child: const Text('Sign in'),
-                          ),
-                        ],
                       ),
                     ],
                   ),

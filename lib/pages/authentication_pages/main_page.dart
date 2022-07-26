@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/verify_email_page.dart';
 import 'authentication_page.dart';
 import '../home_page.dart';
 import 'login_page.dart';
@@ -18,11 +19,7 @@ class MainPage extends StatelessWidget {
           } else if (snapshot.hasError) {
             return const Center(child: Text('Something went wrong.'));
           } else if (snapshot.hasData) {
-            if (FirebaseAuth.instance.currentUser!.emailVerified) {
-              return const HomePage();
-            } else {
-              return const LoginPage();
-            }
+            return const VerifyEmailPage();
           } else {
             return const AuthenticationPage();
           }
