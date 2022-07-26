@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:async';
 import '../home_page.dart';
 
@@ -37,7 +38,15 @@ class _VerifyEmailPageState extends State<VerifyEmailPage> {
   @override
   Widget build(BuildContext context) => isEmailVerified
       ? const HomePage()
-      : Scaffold(appBar: AppBar(title: const Text('Verify Email')));
+      : Scaffold(
+          appBar: AppBar(title: const Text('Verify Email')),
+          body: const Center(
+            child: SpinKitCubeGrid(
+              size: 140,
+              color: Colors.white,
+            ),
+          ),
+        );
 
   Future sendEmailVerification() async {
     final user = FirebaseAuth.instance.currentUser!;
