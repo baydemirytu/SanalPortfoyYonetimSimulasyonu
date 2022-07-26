@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/main_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class IntroductionPage extends StatelessWidget {
   const IntroductionPage({Key? key}) : super(key: key);
+
+  saveDone() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("intro", true);
+  }
 
   List<PageViewModel> getPages() {
     return [
@@ -42,6 +48,7 @@ class IntroductionPage extends StatelessWidget {
         skip: const Text("Skip"),
         done: const Text("Done", style: TextStyle(fontWeight: FontWeight.w600)),
         onDone: () {
+          saveDone();
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
