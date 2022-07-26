@@ -26,7 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
         email: mailController.text.trim(),
         password: passwordController.text.trim(),
       );
-
+      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
       CSD.CustomShowDialog.showDialog(context,
           "User created and verification email sent to ${mailController.text.trim()}. Do not forget to check spam folder!");
     } on FirebaseAuthException catch (e) {
