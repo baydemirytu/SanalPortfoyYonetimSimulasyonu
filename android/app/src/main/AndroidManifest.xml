@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sanal_portfoy_yonetim_simulasyonu">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
         android:label="sanal_portfoy_yonetim_simulasyonu"
         android:name="${applicationName}"
