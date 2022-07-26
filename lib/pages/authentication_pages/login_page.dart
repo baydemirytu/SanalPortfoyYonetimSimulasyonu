@@ -34,10 +34,11 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (!FirebaseAuth.instance.currentUser!.emailVerified) {
-        csd.CustomShowDialog.showDialog("Please verify your email first!");
+        csd.CustomShowDialog.showDialog(
+            context, "Please verify your email first!");
       }
     } on FirebaseAuthException catch (e) {
-      csd.CustomShowDialog.showDialog(e.message.toString());
+      csd.CustomShowDialog.showDialog(context, e.message.toString());
     }
   }
 
