@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/constants/functions/customShowDialog.dart'
@@ -36,9 +37,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            "Enter your email to get reset password link!",
-            textAlign: TextAlign.center,
+          SizedBox(
+            width: 250.0,
+            child: DefaultTextStyle(
+              style: const TextStyle(
+                  fontSize: 30.0, fontFamily: 'Agne', color: Colors.white),
+              child: AnimatedTextKit(
+                pause: const Duration(milliseconds: 500),
+                animatedTexts: [
+                  TypewriterAnimatedText('Forgot your password?'),
+                  TypewriterAnimatedText(
+                      'Enter your email to get reset password link!'),
+                ],
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(20),

@@ -13,22 +13,11 @@ void main() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   var introduction = prefs.getBool("intro");
 
-  runApp(MaterialApp(
+  runApp(
+    MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(colorScheme: darkTheme),
-      home:
-          introduction == null ? const IntroductionPage() : const MainPage()));
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const IntroductionPage(),
-      theme: ThemeData(colorScheme: darkTheme),
-    );
-  }
+      home: introduction == null ? const IntroductionPage() : const MainPage(),
+    ),
+  );
 }
