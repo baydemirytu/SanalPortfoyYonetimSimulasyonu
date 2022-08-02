@@ -17,17 +17,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sanal Portföy'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut();
-            },
-            icon: const Icon(
-              Icons.power_settings_new,
-              color: Colors.red,
-            ),
-          )
-        ],
       ),
       drawer: AppBarDrawer(),
       body: Center(
