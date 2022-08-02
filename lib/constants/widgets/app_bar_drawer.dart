@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 
 import '../../fiyatlar.dart';
 import '../../pages/calculation_page.dart';
@@ -14,13 +15,24 @@ class AppBarDrawer extends StatelessWidget {
       child: ListView(
         children: [
           DrawerHeader(
+            decoration:
+                const BoxDecoration(color: Color.fromARGB(255, 87, 148, 197)),
             curve: Curves.fastLinearToSlowEaseIn,
-            child: Text('${user.email}'),
+            child: Text(
+              '${user.email}',
+              textAlign: TextAlign.center,
+            ),
           ),
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Home'),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(),
+                  ));
+            },
           ),
           ListTile(
             leading: const Icon(Icons.account_circle),
@@ -56,13 +68,11 @@ class AppBarDrawer extends StatelessWidget {
               );
             },
           ),
-          const Divider(height: 10, color: Colors.white),
+          const Divider(height: 20, color: Colors.white),
           ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
-            onTap: () {
-              FirebaseAuth.instance.signOut();
-            },
+            onTap: () {},
           ),
           ListTile(
             leading: const Icon(Icons.power_settings_new),
