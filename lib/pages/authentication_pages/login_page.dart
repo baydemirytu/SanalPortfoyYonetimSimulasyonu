@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/register_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/constants/functions/customShowDialog.dart'
     as csd;
@@ -79,6 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: [
                       TextFormField(
+                        keyboardType: TextInputType.emailAddress,
                         validator: (value) => EmailValidator.validate(value!)
                             ? null
                             : "Please enter a valid email",

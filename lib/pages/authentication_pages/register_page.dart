@@ -71,6 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Column(
                     children: [
                       TextFormField(
+                        keyboardType: TextInputType.emailAddress,
                         validator: (value) => EmailValidator.validate(value!)
                             ? null
                             : "Please enter a valid email",

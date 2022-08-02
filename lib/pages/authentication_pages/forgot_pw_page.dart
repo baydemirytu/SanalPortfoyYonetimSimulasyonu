@@ -40,14 +40,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           SizedBox(
             width: 250.0,
             child: DefaultTextStyle(
-              style: const TextStyle(
-                  fontSize: 30.0, fontFamily: 'Agne', color: Colors.white),
+              style: const TextStyle(fontSize: 30.0, color: Colors.white),
               child: AnimatedTextKit(
                 pause: const Duration(milliseconds: 500),
                 animatedTexts: [
-                  TypewriterAnimatedText('Forgot your password?'),
                   TypewriterAnimatedText(
-                      'Enter your email to get reset password link!'),
+                    'Forgot your password?',
+                    speed: const Duration(milliseconds: 150),
+                  ),
+                  TypewriterAnimatedText(
+                    'Enter your email to get reset password link!',
+                    speed: const Duration(milliseconds: 150),
+                  ),
                 ],
               ),
             ),
@@ -55,6 +59,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           Padding(
             padding: const EdgeInsets.all(20),
             child: TextFormField(
+              keyboardType: TextInputType.emailAddress,
               maxLines: 1,
               decoration: InputDecoration(
                 hintText: 'Enter your email',
