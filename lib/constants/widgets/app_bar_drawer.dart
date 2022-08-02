@@ -1,12 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/main_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 
 import '../../fiyatlar.dart';
 import '../../pages/calculation_page.dart';
 
-class AppBarDrawer extends StatelessWidget {
-  AppBarDrawer({Key? key}) : super(key: key);
+class AppBarDrawer extends StatefulWidget {
+  const AppBarDrawer({Key? key}) : super(key: key);
+
+  @override
+  State<AppBarDrawer> createState() => _AppBarDrawerState();
+}
+
+class _AppBarDrawerState extends State<AppBarDrawer> {
   final user = FirebaseAuth.instance.currentUser!;
 
   @override
@@ -78,8 +85,11 @@ class AppBarDrawer extends StatelessWidget {
             leading: const Icon(Icons.power_settings_new),
             title: const Text('Log Out'),
             iconColor: Colors.red,
-            onTap: () {
-              FirebaseAuth.instance.signOut();
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+              // ignore: use_build_context_synchronously
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const MainPage()));
             },
           ),
         ],
