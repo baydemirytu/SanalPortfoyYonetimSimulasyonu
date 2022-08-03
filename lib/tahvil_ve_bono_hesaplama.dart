@@ -1,5 +1,9 @@
+import 'dart:math';
+
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import "package:flutter/services.dart";
 
@@ -34,31 +38,62 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
   final TextEditingController anaParaController = TextEditingController();
   final TextEditingController faizController = TextEditingController();
   final TextEditingController fiyatController = TextEditingController();
-  final _confettiController = ConfettiController();
+  final ConfettiController _confettiController =
+      ConfettiController(duration: const Duration(seconds: 1));
+
   bool validateDays = true;
   bool validateFiyat = true;
   bool isPlaying = true;
+
+  double getiri = 0;
 
   @override
   void initState() {
     remaningDaysInput.addListener(this.onRemainingDaysChanged);
     dateInput.addListener(this.onDateChanged);
     fiyatController.addListener(this.onFiyatChanged);
+    //faizController.addListener(this.onFaizChanged);
     super.initState();
   }
 
+  // void onFaizChanged() {
+  //   faizController.selection = TextSelection.fromPosition(
+  //     TextPosition(
+  //       offset: faizController.text.length,
+  //     ),
+  //   );
+  //   double? faiz = double.tryParse(faizController.text);
+  //   int? days = int.tryParse(remaningDaysInput.text);
+
+  //   if (days != null && faiz != null) {
+  //     double fiyat =
+  //         100 / (faiz / (365 / int.parse(remaningDaysInput.text)) + 1);
+
+  //     fiyatController.text = fiyat.toStringAsFixed(2);
+  //   }
+  //   setState(() {});
+  // }
+
   void onFiyatChanged() {
-    int? fiyatControllerInt = int.tryParse(fiyatController.text);
+    fiyatController.selection = TextSelection.fromPosition(
+      TextPosition(
+        offset: fiyatController.text.length,
+      ),
+    );
+    double? fiyatControllerInt = double.tryParse(fiyatController.text);
     print(fiyatControllerInt);
     if (fiyatControllerInt != null &&
         fiyatControllerInt >= 50 &&
         fiyatControllerInt <= 200) {
       validateFiyat = true;
-      double basitFaiz = (100 / fiyatControllerInt - 1) *
-          (365 / int.parse(remaningDaysInput.text));
-      // Eğer fiyat girilirse Basit Faiz= (İtfa fiyatı/Fiyat-1)(Yıl gün sayısı/Vadeye kalan gün sayısı)100 formülü ile Basit Faiz bulunacak,
-      // sonra YBF girilmiş gibi hesaplama devam edecek
-
+      if (remaningDaysInput.text != null) {
+        double basitFaiz = (100 / fiyatControllerInt - 1) *
+            (365 / int.parse(remaningDaysInput.text));
+        print(basitFaiz);
+        faizController.text = basitFaiz.toStringAsFixed(2);
+        // Eğer fiyat girilirse Basit Faiz= (İtfa fiyatı/Fiyat-1)(Yıl gün sayısı/Vadeye kalan gün sayısı)100 formülü ile Basit Faiz bulunacak,
+        // sonra YBF girilmiş gibi hesaplama devam edecek
+      }
     } else {
       validateFiyat = false;
     }
@@ -92,7 +127,7 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(right: 20, left: 8, bottom: 8, top: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -109,7 +144,7 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
                 labelText: 'Ana Para',
-                hintText: 'Örnek: 100.000',
+                hintText: 'Örnek: 100000',
                 icon: const Icon(Icons.attach_money),
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3, color: Colors.blue),
@@ -163,7 +198,7 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
                 }
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextField(
@@ -195,6 +230,10 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
                   flex: 7,
                   child: TextField(
                     controller: faizController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[0-9.]'))
+                    ],
                     decoration: InputDecoration(
                       icon: const Icon(Icons.percent),
                       labelText: 'Basit Faiz Oranı (%)',
@@ -212,15 +251,19 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Expanded(
                   flex: 5,
                   child: TextField(
                     controller: fiyatController,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp('[0-9.]'))
+                    ],
                     decoration: InputDecoration(
-                      icon: const Icon(Icons.percent),
+                      icon: const Icon(Icons.payments_outlined),
                       labelText: 'Fiyat',
                       hintText: 'Örnek: 200',
                       errorText: !validateFiyat ? '50-200' : null,
@@ -242,12 +285,14 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
                 TahvilVeBonoHesaplamaFonksiyonu f =
                     TahvilVeBonoHesaplamaFonksiyonu(
                   anaPara: int.parse(anaParaController.text),
                   yillikFaiz: double.parse(faizController.text),
                   kalanGun: int.parse(remaningDaysInput.text),
                 );
+                getiri = f.getiri();
                 print(num.parse(f.getiri().toStringAsFixed(2)));
                 if (isPlaying) {
                   _confettiController.play();
@@ -255,13 +300,30 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
                   _confettiController.stop();
                 }
                 isPlaying = !isPlaying;
+                setState(() {});
               },
               child: const Text('Calculate'),
             ),
+            Text(
+              'Getiri: ${getiri.toStringAsFixed(2)} TL',
+              style: GoogleFonts.roboto(fontSize: 32, color: Colors.white),
+            ),
             Center(
               child: ConfettiWidget(
+                maxBlastForce: 25,
+                minBlastForce: 10,
+                particleDrag: 0.05,
+                emissionFrequency: 0.05,
+                numberOfParticles: 50,
+                gravity: 0.05,
+                shouldLoop: false,
+                blastDirectionality: BlastDirectionality.explosive,
                 confettiController: _confettiController,
-                colors: const [Colors.green],
+                colors: [
+                  Colors.green,
+                  Colors.green.shade200,
+                  Colors.green.shade900
+                ],
               ),
             )
           ],
