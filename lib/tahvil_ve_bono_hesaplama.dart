@@ -1,6 +1,25 @@
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import "package:flutter/services.dart";
+
+class TahvilVeBonoHesaplamaFonksiyonu {
+  TahvilVeBonoHesaplamaFonksiyonu({
+    required this.anaPara,
+    required this.yillikFaiz,
+    required this.kalanGun,
+  });
+
+  final int anaPara;
+  final double yillikFaiz;
+  final int kalanGun;
+
+  double getiri() {
+    double sonuc;
+    sonuc = ((yillikFaiz / 365) / 100) * anaPara * kalanGun;
+    return sonuc;
+  }
+}
 
 class TahvilVeBono extends StatefulWidget {
   const TahvilVeBono({Key? key}) : super(key: key);
@@ -12,13 +31,38 @@ class TahvilVeBono extends StatefulWidget {
 class _TahvilVeBonoState extends State<TahvilVeBono> {
   final TextEditingController remaningDaysInput = TextEditingController();
   final TextEditingController dateInput = TextEditingController();
+  final TextEditingController anaParaController = TextEditingController();
+  final TextEditingController faizController = TextEditingController();
+  final TextEditingController fiyatController = TextEditingController();
+  final _confettiController = ConfettiController();
   bool validateDays = true;
+  bool validateFiyat = true;
+  bool isPlaying = true;
 
   @override
   void initState() {
     remaningDaysInput.addListener(this.onRemainingDaysChanged);
     dateInput.addListener(this.onDateChanged);
+    fiyatController.addListener(this.onFiyatChanged);
     super.initState();
+  }
+
+  void onFiyatChanged() {
+    int? fiyatControllerInt = int.tryParse(fiyatController.text);
+    print(fiyatControllerInt);
+    if (fiyatControllerInt != null &&
+        fiyatControllerInt >= 50 &&
+        fiyatControllerInt <= 200) {
+      validateFiyat = true;
+      double basitFaiz = (100 / fiyatControllerInt - 1) *
+          (365 / int.parse(remaningDaysInput.text));
+      // Eğer fiyat girilirse Basit Faiz= (İtfa fiyatı/Fiyat-1)(Yıl gün sayısı/Vadeye kalan gün sayısı)100 formülü ile Basit Faiz bulunacak,
+      // sonra YBF girilmiş gibi hesaplama devam edecek
+
+    } else {
+      validateFiyat = false;
+    }
+    setState(() {});
   }
 
   void onRemainingDaysChanged() {
@@ -60,6 +104,7 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
               height: 10,
             ),
             TextField(
+              controller: anaParaController,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
@@ -80,50 +125,11 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
               height: 20,
             ),
             TextField(
-              decoration: InputDecoration(
-                icon: const Icon(Icons.percent),
-                labelText: 'Yıllık Basit Faiz Oranı (%)',
-                hintText: 'Örnek: 14',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.blue),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.red),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: remaningDaysInput,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(
-                errorText:
-                    !validateDays ? 'Enter a day value less than 100000' : null,
-                icon: const Icon(Icons.hourglass_bottom),
-                hintText: 'Örnek: 50',
-                labelText: 'Vadeye Kalan Gün',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.blue),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.red),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextField(
               controller: dateInput,
               decoration: InputDecoration(
                 icon: const Icon(Icons.date_range_sharp),
                 hintText: 'Örnek: 01.01.2023',
-                labelText: 'Ya Da Vade Bitiş Tarihi',
+                labelText: 'Vade Bitiş Tarihi',
                 enabledBorder: OutlineInputBorder(
                   borderSide: const BorderSide(width: 3, color: Colors.blue),
                   borderRadius: BorderRadius.circular(15),
@@ -151,18 +157,113 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
 
                   setState(
                     () {
-                      dateInput.text =
-                          formattedDate; //set output date to TextField value.
+                      dateInput.text = formattedDate;
                     },
                   );
                 }
               },
             ),
+            SizedBox(
+              height: 10,
+            ),
+            TextField(
+              controller: remaningDaysInput,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              decoration: InputDecoration(
+                errorText:
+                    !validateDays ? 'Enter a day value less than 100000' : null,
+                icon: const Icon(Icons.hourglass_bottom),
+                hintText: 'Örnek: 50',
+                labelText: 'Vadeye Kalan Gün',
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(width: 3, color: Colors.blue),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(width: 3, color: Colors.red),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  flex: 7,
+                  child: TextField(
+                    controller: faizController,
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.percent),
+                      labelText: 'Basit Faiz Oranı (%)',
+                      hintText: 'Örnek: 14',
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 3, color: Colors.blue),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 3, color: Colors.red),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  flex: 5,
+                  child: TextField(
+                    controller: fiyatController,
+                    decoration: InputDecoration(
+                      icon: const Icon(Icons.percent),
+                      labelText: 'Fiyat',
+                      hintText: 'Örnek: 200',
+                      errorText: !validateFiyat ? '50-200' : null,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 3, color: Colors.blue),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(width: 3, color: Colors.red),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                TahvilVeBonoHesaplamaFonksiyonu f =
+                    TahvilVeBonoHesaplamaFonksiyonu(
+                  anaPara: int.parse(anaParaController.text),
+                  yillikFaiz: double.parse(faizController.text),
+                  kalanGun: int.parse(remaningDaysInput.text),
+                );
+                print(num.parse(f.getiri().toStringAsFixed(2)));
+                if (isPlaying) {
+                  _confettiController.play();
+                } else {
+                  _confettiController.stop();
+                }
+                isPlaying = !isPlaying;
+              },
               child: const Text('Calculate'),
             ),
+            Center(
+              child: ConfettiWidget(
+                confettiController: _confettiController,
+                colors: const [Colors.green],
+              ),
+            )
           ],
         ),
       ),
@@ -173,6 +274,8 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
   void dispose() {
     remaningDaysInput.dispose();
     dateInput.dispose();
+    faizController.dispose();
+    anaParaController.dispose();
     super.dispose();
   }
 }
