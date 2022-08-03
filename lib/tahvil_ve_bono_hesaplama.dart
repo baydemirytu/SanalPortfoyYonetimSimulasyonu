@@ -25,6 +25,23 @@ class TahvilVeBonoHesaplamaFonksiyonu {
   }
 }
 
+class BilesikFaizHesaplamaFonksiyonu {
+  BilesikFaizHesaplamaFonksiyonu({
+    required this.basitFaiz,
+    required this.kalanGun,
+  });
+
+  final double basitFaiz;
+  final int kalanGun;
+
+  double bilesikFaiz() {
+    double sonuc;
+    sonuc =
+        (pow(1 + basitFaiz / 100 * kalanGun / 365, 365 / kalanGun) - 1) * 100;
+    return sonuc;
+  }
+}
+
 class TahvilVeBono extends StatefulWidget {
   const TahvilVeBono({Key? key}) : super(key: key);
 
@@ -46,6 +63,7 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
   bool isPlaying = true;
 
   double getiri = 0;
+  double bilesikFaiz = 0;
 
   @override
   void initState() {
@@ -90,7 +108,7 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
         double basitFaiz = (100 / fiyatControllerInt - 1) *
             (365 / int.parse(remaningDaysInput.text));
         print(basitFaiz);
-        faizController.text = basitFaiz.toStringAsFixed(2);
+        faizController.text = basitFaiz.toStringAsFixed(1);
         // Eğer fiyat girilirse Basit Faiz= (İtfa fiyatı/Fiyat-1)(Yıl gün sayısı/Vadeye kalan gün sayısı)100 formülü ile Basit Faiz bulunacak,
         // sonra YBF girilmiş gibi hesaplama devam edecek
       }
@@ -243,7 +261,7 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
                     decoration: InputDecoration(
                       icon: const Icon(Icons.percent, color: Colors.blueGrey),
                       labelText: 'Basit Faiz Oranı (%)',
-                      hintText: 'Örnek: 14',
+                      hintText: 'Örnek: 14.1',
                       enabledBorder: OutlineInputBorder(
                         borderSide:
                             const BorderSide(width: 2, color: Colors.blue),
@@ -302,7 +320,12 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
                   yillikFaiz: double.parse(faizController.text),
                   kalanGun: int.parse(remaningDaysInput.text),
                 );
+                BilesikFaizHesaplamaFonksiyonu b =
+                    BilesikFaizHesaplamaFonksiyonu(
+                        basitFaiz: double.parse(faizController.text),
+                        kalanGun: int.parse(remaningDaysInput.text));
                 getiri = f.getiri();
+                bilesikFaiz = b.bilesikFaiz();
                 if (getiri > 0) {
                   _confettiController.play();
                 }
@@ -326,6 +349,28 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
                 ),
                 Text(
                   'Getiri: ${getiri.toStringAsFixed(2)} TL',
+                  style: GoogleFonts.roboto(fontSize: 32, color: Colors.white),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.percent,
+                  size: 20,
+                  color: Colors.grey,
+                ),
+                const Icon(
+                  Icons.percent,
+                  size: 30,
+                  color: Colors.blueGrey,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'Bileşik Faiz: ${bilesikFaiz.toStringAsFixed(1)}',
                   style: GoogleFonts.roboto(fontSize: 32, color: Colors.white),
                 ),
               ],
