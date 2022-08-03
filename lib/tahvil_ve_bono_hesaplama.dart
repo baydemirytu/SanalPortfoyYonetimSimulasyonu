@@ -131,10 +131,6 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
-              'Bono ve Tahvil Hesaplama',
-              style: Theme.of(context).textTheme.headline6,
-            ),
             const SizedBox(
               height: 10,
             ),
@@ -145,32 +141,37 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
               decoration: InputDecoration(
                 labelText: 'Ana Para',
                 hintText: 'Örnek: 100000',
-                icon: const Icon(Icons.attach_money),
+                icon: const Icon(
+                  Icons.currency_lira,
+                  color: Colors.greenAccent,
+                ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.blue),
+                  borderSide: const BorderSide(width: 2, color: Colors.blue),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.red),
+                  borderSide: const BorderSide(width: 2, color: Colors.red),
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
             ),
-            const SizedBox(
-              height: 20,
+            const Divider(
+              height: 25,
+              color: Colors.white,
+              thickness: 0.5,
             ),
             TextField(
               controller: dateInput,
               decoration: InputDecoration(
-                icon: const Icon(Icons.date_range_sharp),
+                icon: const Icon(Icons.date_range_sharp, color: Colors.white),
                 hintText: 'Örnek: 01.01.2023',
                 labelText: 'Vade Bitiş Tarihi',
                 enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.blue),
+                  borderSide: const BorderSide(width: 2, color: Colors.blue),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.red),
+                  borderSide: const BorderSide(width: 2, color: Colors.red),
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
@@ -206,23 +207,27 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
-                errorText:
-                    !validateDays ? 'Enter a day value less than 100000' : null,
-                icon: const Icon(Icons.hourglass_bottom),
+                errorText: !validateDays ? '100000\'den az değer girin' : null,
+                icon: const Icon(
+                  Icons.hourglass_bottom,
+                  color: Colors.deepOrange,
+                ),
                 hintText: 'Örnek: 50',
                 labelText: 'Vadeye Kalan Gün',
                 enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.blue),
+                  borderSide: const BorderSide(width: 2, color: Colors.blue),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(width: 3, color: Colors.red),
+                  borderSide: const BorderSide(width: 2, color: Colors.red),
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
             ),
-            const SizedBox(
-              height: 20,
+            const Divider(
+              height: 25,
+              color: Colors.white,
+              thickness: 0.5,
             ),
             Row(
               children: [
@@ -232,20 +237,21 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
                     controller: faizController,
                     keyboardType: TextInputType.number,
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp('[0-9.]'))
+                      FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+                      FilteringTextInputFormatter.deny(RegExp('[.][.]'))
                     ],
                     decoration: InputDecoration(
-                      icon: const Icon(Icons.percent),
+                      icon: const Icon(Icons.percent, color: Colors.blueGrey),
                       labelText: 'Basit Faiz Oranı (%)',
                       hintText: 'Örnek: 14',
                       enabledBorder: OutlineInputBorder(
                         borderSide:
-                            const BorderSide(width: 3, color: Colors.blue),
+                            const BorderSide(width: 2, color: Colors.blue),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                            const BorderSide(width: 3, color: Colors.red),
+                            const BorderSide(width: 2, color: Colors.red),
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
@@ -260,21 +266,25 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
                     controller: fiyatController,
                     keyboardType: TextInputType.number,
                     inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp('[0-9.]'))
+                      FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+                      FilteringTextInputFormatter.deny(RegExp('[.][.]'))
                     ],
                     decoration: InputDecoration(
-                      icon: const Icon(Icons.payments_outlined),
+                      icon: const Icon(
+                        Icons.payments_outlined,
+                        color: Colors.lightGreen,
+                      ),
                       labelText: 'Fiyat',
                       hintText: 'Örnek: 200',
                       errorText: !validateFiyat ? '50-200' : null,
                       enabledBorder: OutlineInputBorder(
                         borderSide:
-                            const BorderSide(width: 3, color: Colors.blue),
+                            const BorderSide(width: 2, color: Colors.blue),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide:
-                            const BorderSide(width: 3, color: Colors.red),
+                            const BorderSide(width: 2, color: Colors.red),
                         borderRadius: BorderRadius.circular(15),
                       ),
                     ),
@@ -293,20 +303,32 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
                   kalanGun: int.parse(remaningDaysInput.text),
                 );
                 getiri = f.getiri();
-                print(num.parse(f.getiri().toStringAsFixed(2)));
-                if (isPlaying) {
+                if (getiri > 0) {
                   _confettiController.play();
-                } else {
-                  _confettiController.stop();
                 }
-                isPlaying = !isPlaying;
                 setState(() {});
               },
-              child: const Text('Calculate'),
+              child: const Text(
+                'Calculate',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15),
+              ),
             ),
-            Text(
-              'Getiri: ${getiri.toStringAsFixed(2)} TL',
-              style: GoogleFonts.roboto(fontSize: 32, color: Colors.white),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.savings_outlined,
+                  color: Colors.green,
+                  size: 40,
+                ),
+                Text(
+                  'Getiri: ${getiri.toStringAsFixed(2)} TL',
+                  style: GoogleFonts.roboto(fontSize: 32, color: Colors.white),
+                ),
+              ],
             ),
             Center(
               child: ConfettiWidget(

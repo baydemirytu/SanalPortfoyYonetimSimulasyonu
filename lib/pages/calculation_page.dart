@@ -14,17 +14,49 @@ class _CalculationPageState extends State<CalculationPage> {
   @override
   Widget build(BuildContext context) {
     final PageController controller = PageController();
-    return Scaffold(
-      drawer: AppBarDrawer(),
-      appBar: AppBar(
-        title: const Text('Hesaplama Ekranı'),
-        centerTitle: true,
-      ),
-      body: PageView(
-        controller: controller,
-        children: <Widget>[
-          TahvilVeBono(),
-        ],
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        drawer: const AppBarDrawer(),
+        appBar: AppBar(
+          title: const Text('Hesaplama Ekranı'),
+          centerTitle: true,
+          bottom: const TabBar(
+              isScrollable: true,
+              indicatorWeight: 4,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorColor: Color.fromARGB(255, 63, 101, 133),
+              tabs: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Text(
+                    'Bono Ve Tahvil',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Text(
+                    'Bono Ve Tahvil',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                  child: Text(
+                    'Bono',
+                    style: TextStyle(fontSize: 17),
+                  ),
+                ),
+              ]),
+        ),
+        body: const TabBarView(
+          children: <Widget>[
+            TahvilVeBono(),
+            TahvilVeBono(),
+            TahvilVeBono(),
+          ],
+        ),
       ),
     );
   }
