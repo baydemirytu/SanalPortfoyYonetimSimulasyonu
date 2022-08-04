@@ -13,7 +13,6 @@ class CalculationPage extends StatefulWidget {
 class _CalculationPageState extends State<CalculationPage> {
   @override
   Widget build(BuildContext context) {
-    final PageController controller = PageController();
     return DefaultTabController(
       length: 3,
       child: Scaffold(

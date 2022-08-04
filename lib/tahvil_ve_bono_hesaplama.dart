@@ -70,27 +70,28 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
     remaningDaysInput.addListener(this.onRemainingDaysChanged);
     dateInput.addListener(this.onDateChanged);
     fiyatController.addListener(this.onFiyatChanged);
-    //faizController.addListener(this.onFaizChanged);
+    faizController.addListener(this.onFaizChanged);
     super.initState();
   }
 
-  // void onFaizChanged() {
-  //   faizController.selection = TextSelection.fromPosition(
-  //     TextPosition(
-  //       offset: faizController.text.length,
-  //     ),
-  //   );
-  //   double? faiz = double.tryParse(faizController.text);
-  //   int? days = int.tryParse(remaningDaysInput.text);
+  void onFaizChanged() {
+    faizController.selection = TextSelection.fromPosition(
+      TextPosition(
+        offset: faizController.text.length,
+      ),
+    );
+    double? faiz = double.tryParse(faizController.text);
+    int? days = int.tryParse(remaningDaysInput.text);
 
-  //   if (days != null && faiz != null) {
-  //     double fiyat =
-  //         100 / (faiz / (365 / int.parse(remaningDaysInput.text)) + 1);
-
-  //     fiyatController.text = fiyat.toStringAsFixed(2);
-  //   }
-  //   setState(() {});
-  // }
+    if (days != null && faiz != null) {
+      double fiyat =
+          100 / (faiz / (365 / int.parse(remaningDaysInput.text)) + 1);
+      if (fiyatController.text != fiyat.toStringAsFixed(2)) {
+        fiyatController.text = fiyat.toStringAsFixed(2);
+      }
+    }
+    setState(() {});
+  }
 
   void onFiyatChanged() {
     fiyatController.selection = TextSelection.fromPosition(
@@ -107,10 +108,13 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
       if (remaningDaysInput.text != null) {
         double basitFaiz = (100 / fiyatControllerInt - 1) *
             (365 / int.parse(remaningDaysInput.text));
-        print(basitFaiz);
-        faizController.text = basitFaiz.toStringAsFixed(1);
-        // Eğer fiyat girilirse Basit Faiz= (İtfa fiyatı/Fiyat-1)(Yıl gün sayısı/Vadeye kalan gün sayısı)100 formülü ile Basit Faiz bulunacak,
-        // sonra YBF girilmiş gibi hesaplama devam edecek
+
+        if (faizController.text != basitFaiz.toStringAsFixed(1)) {
+          faizController.text = basitFaiz.toStringAsFixed(1);
+
+          // Eğer fiyat girilirse Basit Faiz= (İtfa fiyatı/Fiyat-1)(Yıl gün sayısı/Vadeye kalan gün sayısı)100 formülü ile Basit Faiz bulunacak,
+          // sonra YBF girilmiş gibi hesaplama devam edecek
+        }
       }
     } else {
       validateFiyat = false;
