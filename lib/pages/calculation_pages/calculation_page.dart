@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/constants/widgets/app_bar_drawer.dart';
 
-import '../tahvil_ve_bono_hesaplama.dart';
+import 'tahvil_ve_bono_hesaplama.dart';
 
 class CalculationPage extends StatefulWidget {
   const CalculationPage({Key? key}) : super(key: key);
@@ -18,6 +18,8 @@ class _CalculationPageState extends State<CalculationPage> {
       child: Scaffold(
         drawer: const AppBarDrawer(),
         appBar: AppBar(
+          shadowColor: Colors.white,
+          elevation: 2,
           title: const Text('Hesaplama Ekranı'),
           centerTitle: true,
           bottom: const TabBar(

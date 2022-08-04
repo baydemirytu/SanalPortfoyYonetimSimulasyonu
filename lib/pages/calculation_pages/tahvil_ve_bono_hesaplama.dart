@@ -318,22 +318,25 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
             ElevatedButton(
               onPressed: () {
                 FocusManager.instance.primaryFocus?.unfocus();
-                TahvilVeBonoHesaplamaFonksiyonu f =
-                    TahvilVeBonoHesaplamaFonksiyonu(
-                  anaPara: int.parse(anaParaController.text),
-                  yillikFaiz: double.parse(faizController.text),
-                  kalanGun: int.parse(remaningDaysInput.text),
-                );
-                BilesikFaizHesaplamaFonksiyonu b =
-                    BilesikFaizHesaplamaFonksiyonu(
-                        basitFaiz: double.parse(faizController.text),
-                        kalanGun: int.parse(remaningDaysInput.text));
-                getiri = f.getiri();
-                bilesikFaiz = b.bilesikFaiz();
-                if (getiri > 0) {
-                  _confettiController.play();
+                double? fiyat = double.tryParse(fiyatController.text);
+                if (fiyat != null && fiyat >= 50 && fiyat <= 200) {
+                  TahvilVeBonoHesaplamaFonksiyonu f =
+                      TahvilVeBonoHesaplamaFonksiyonu(
+                    anaPara: int.parse(anaParaController.text),
+                    yillikFaiz: double.parse(faizController.text),
+                    kalanGun: int.parse(remaningDaysInput.text),
+                  );
+                  BilesikFaizHesaplamaFonksiyonu b =
+                      BilesikFaizHesaplamaFonksiyonu(
+                          basitFaiz: double.parse(faizController.text),
+                          kalanGun: int.parse(remaningDaysInput.text));
+                  getiri = f.getiri();
+                  bilesikFaiz = b.bilesikFaiz();
+                  if (getiri > 0) {
+                    _confettiController.play();
+                  }
+                  setState(() {});
                 }
-                setState(() {});
               },
               child: const Text(
                 'Calculate',

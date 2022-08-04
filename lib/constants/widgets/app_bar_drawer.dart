@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/main_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 
-import '../../loading_screen_prices.dart';
-import '../../pages/calculation_page.dart';
+import '../../pages/calculation_pages/calculation_page.dart';
+import '../../pages/prices_pages/loading_screen_prices.dart';
 
 class AppBarDrawer extends StatefulWidget {
   const AppBarDrawer({Key? key}) : super(key: key);
