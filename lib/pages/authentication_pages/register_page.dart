@@ -42,14 +42,14 @@ class _RegisterPageState extends State<RegisterPage> {
       );
       CSD.CustomShowDialog.showDialog(context,
           "User created and verification email sent to ${mailController.text.trim()}. Do not forget to check spam folder!");
+      addUserDetails(
+        nameController.text.trim(),
+        surnameController.text.trim(),
+        mailController.text.trim(),
+      );
     } on FirebaseAuthException catch (e) {
       CSD.CustomShowDialog.showDialog(context, e.message.toString());
     }
-    addUserDetails(
-      nameController.text.trim(),
-      surnameController.text.trim(),
-      mailController.text.trim(),
-    );
   }
 
   @override
