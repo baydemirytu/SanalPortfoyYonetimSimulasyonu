@@ -18,6 +18,8 @@ class _CalculationPageState extends State<CalculationPage> {
       child: Scaffold(
         drawer: const AppBarDrawer(),
         appBar: AppBar(
+          shadowColor: Colors.white,
+          elevation: 2,
           title: const Text('Hesaplama Ekranı'),
           centerTitle: true,
           bottom: const TabBar(
