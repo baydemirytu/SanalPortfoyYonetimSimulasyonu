@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/main_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 
-import '../../fiyatlar.dart';
+import '../../loading_screen_prices.dart';
 import '../../pages/calculation_page.dart';
 
 class AppBarDrawer extends StatefulWidget {
@@ -70,7 +70,7 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const Fiyatlar(),
+                  builder: (context) => const PricesLoading(),
                 ),
               );
             },
