@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,20 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController mailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController surnameController = TextEditingController();
+
+  Future addUserDetails(
+      String firstName, String lastName, String userEmail) async {
+    await FirebaseFirestore.instance.collection('users').add(
+      {
+        'First name': firstName,
+        'Last name': lastName,
+        'Email': userEmail,
+        'Balance': 100000,
+      },
+    );
+  }
 
   Future signUp() async {
     try {
@@ -30,6 +45,11 @@ class _RegisterPageState extends State<RegisterPage> {
     } on FirebaseAuthException catch (e) {
       CSD.CustomShowDialog.showDialog(context, e.message.toString());
     }
+    addUserDetails(
+      nameController.text.trim(),
+      surnameController.text.trim(),
+      mailController.text.trim(),
+    );
   }
 
   @override
@@ -82,6 +102,56 @@ class _RegisterPageState extends State<RegisterPage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value != null && value.length < 2) {
+                                  return 'Please enter a valid name';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              maxLines: 1,
+                              controller: nameController,
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.person),
+                                hintText: 'Your name',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Expanded(
+                            child: TextFormField(
+                              validator: (value) {
+                                if (value != null && value.length < 2) {
+                                  return 'Please enter a valid surname';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              maxLines: 1,
+                              controller: surnameController,
+                              decoration: InputDecoration(
+                                prefixIcon: const Icon(Icons.person_outlined),
+                                hintText: 'Your surname',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 20,
