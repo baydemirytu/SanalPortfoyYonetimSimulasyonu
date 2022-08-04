@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sanal_portfoy_yonetim_simulasyonu/networking.dart';
-import 'prices_screen.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/networking.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/prices_screen.dart';
 
 //This page loads data
 class PricesLoading extends StatefulWidget {

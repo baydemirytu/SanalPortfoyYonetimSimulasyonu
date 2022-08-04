@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/constants/widgets/app_bar_drawer.dart';
 
-import '../tahvil_ve_bono_hesaplama.dart';
+import 'tahvil_ve_bono_hesaplama.dart';
 
 class CalculationPage extends StatefulWidget {
   const CalculationPage({Key? key}) : super(key: key);
