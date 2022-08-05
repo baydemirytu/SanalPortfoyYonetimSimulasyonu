@@ -109,8 +109,8 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
         double basitFaiz = (100 / fiyatControllerInt - 1) *
             (365 / int.parse(remaningDaysInput.text));
 
-        if (faizController.text != basitFaiz.toStringAsFixed(1)) {
-          faizController.text = basitFaiz.toStringAsFixed(1);
+        if (faizController.text != basitFaiz.toStringAsFixed(4)) {
+          faizController.text = basitFaiz.toStringAsFixed(4);
 
           // Eğer fiyat girilirse Basit Faiz= (İtfa fiyatı/Fiyat-1)(Yıl gün sayısı/Vadeye kalan gün sayısı)100 formülü ile Basit Faiz bulunacak,
           // sonra YBF girilmiş gibi hesaplama devam edecek

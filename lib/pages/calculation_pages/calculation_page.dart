@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/constants/widgets/app_bar_drawer.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/calculation_pages/vadeli_mevduat_hesaplama.dart';
 
 import 'tahvil_ve_bono_hesaplama.dart';
 
@@ -14,7 +15,7 @@ class _CalculationPageState extends State<CalculationPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         drawer: const AppBarDrawer(),
         appBar: AppBar(
@@ -31,7 +32,7 @@ class _CalculationPageState extends State<CalculationPage> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   child: Text(
-                    'Bono Ve Tahvil',
+                    'Vadeli Mevduat',
                     style: TextStyle(fontSize: 17),
                   ),
                 ),
@@ -39,24 +40,13 @@ class _CalculationPageState extends State<CalculationPage> {
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                   child: Text(
                     'Bono Ve Tahvil',
-                    style: TextStyle(fontSize: 17),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Text(
-                    'Bono',
                     style: TextStyle(fontSize: 17),
                   ),
                 ),
               ]),
         ),
         body: const TabBarView(
-          children: <Widget>[
-            TahvilVeBono(),
-            TahvilVeBono(),
-            TahvilVeBono(),
-          ],
+          children: <Widget>[VadeliMevduatHesaplama(), TahvilVeBono()],
         ),
       ),
     );
