@@ -16,20 +16,22 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   var rememberValue = false;
-
   final TextEditingController mailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController surnameController = TextEditingController();
+  final TextEditingController balanceController = TextEditingController();
+  bool wantedToBeInLeaderBoard = false;
 
-  Future addUserDetails(
-      String firstName, String lastName, String userEmail) async {
+  Future addUserDetails(String firstName, String lastName, String userEmail,
+      double userBalance) async {
     await FirebaseFirestore.instance.collection('users').add(
       {
         'First name': firstName,
         'Last name': lastName,
         'Email': userEmail,
-        'Balance': 100000,
+        'Balance': userBalance,
+        'OnTheLeaderBoard': wantedToBeInLeaderBoard,
       },
     );
   }
@@ -46,6 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
         nameController.text.trim(),
         surnameController.text.trim(),
         mailController.text.trim(),
+        double.parse(balanceController.text),
       );
     } on FirebaseAuthException catch (e) {
       CSD.CustomShowDialog.showDialog(context, e.message.toString());
@@ -177,6 +180,39 @@ class _RegisterPageState extends State<RegisterPage> {
                       const SizedBox(
                         height: 20,
                       ),
+                      TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your balance';
+                          } else if (double.parse(value) < 1000) {
+                            return 'Please choose a balance greated than 999';
+                          }
+                          return null;
+                        },
+                        maxLines: 1,
+                        controller: balanceController,
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.attach_money_rounded),
+                          hintText: 'Enter the balance',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      CheckboxListTile(
+                        title: const Text(
+                          'Do you want to be in the leaderboard?',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        value: wantedToBeInLeaderBoard,
+                        onChanged: (value) => setState(
+                          () {
+                            wantedToBeInLeaderBoard = !wantedToBeInLeaderBoard;
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
@@ -193,9 +229,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 )
