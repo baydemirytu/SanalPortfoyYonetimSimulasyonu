@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -374,13 +372,13 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                   children: [
                     TableRow(children: [
                       buildTableCell(''),
-                      buildScrollableCell('28-31 gün'),
-                      buildScrollableCell('32-91 gün'),
-                      buildScrollableCell('92-368 gün'),
-                      buildScrollableCell('369-730 gün'),
+                      buildTableCell('28-31 gün'),
+                      buildTableCell('32-91 gün'),
+                      buildTableCell('92-368 gün'),
+                      buildTableCell('369-730 gün'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('1.000-\n9.999 TRY'),
+                      buildTableCell('1.000-\n9.999 TRY'),
                       buildTableCell(
                           '% ${liraFaizOranlari[0][0].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -391,7 +389,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                           '% ${liraFaizOranlari[3][0].toStringAsFixed(2)}'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('10.000-\n49.999 TRY'),
+                      buildTableCell('10.000-\n49.999 TRY'),
                       buildTableCell(
                           '% ${liraFaizOranlari[0][1].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -402,7 +400,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                           '% ${liraFaizOranlari[3][1].toStringAsFixed(2)}'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('50.000-\n99.999 TRY'),
+                      buildTableCell('50.000-\n99.999 TRY'),
                       buildTableCell(
                           '% ${liraFaizOranlari[0][2].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -413,7 +411,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                           '% ${liraFaizOranlari[3][2].toStringAsFixed(2)}'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('100.000-\n249.999 TRY'),
+                      buildTableCell('100.000-\n249.999 TRY'),
                       buildTableCell(
                           '% ${liraFaizOranlari[0][3].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -424,7 +422,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                           '% ${liraFaizOranlari[3][3].toStringAsFixed(2)}'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('250.000-\n499.999 TRY'),
+                      buildTableCell('250.000-\n499.999 TRY'),
                       buildTableCell(
                           '% ${liraFaizOranlari[0][4].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -435,7 +433,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                           '% ${liraFaizOranlari[3][4].toStringAsFixed(2)}'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('500.000-\n999.999 TRY'),
+                      buildTableCell('500.000-\n999.999 TRY'),
                       buildTableCell(
                           '% ${liraFaizOranlari[0][5].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -446,7 +444,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                           '% ${liraFaizOranlari[3][5].toStringAsFixed(2)}'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('1.000.000-\n5.000.000 TRY'),
+                      buildTableCell('1.000.000-\n5.000.000 TRY'),
                       buildTableCell(
                           '% ${liraFaizOranlari[0][6].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -473,13 +471,13 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                   children: [
                     TableRow(children: [
                       buildTableCell(''),
-                      buildScrollableCell('28-91 gün'),
-                      buildScrollableCell('92-182 gün'),
-                      buildScrollableCell('183-364 gün'),
-                      buildScrollableCell('365-730 gün'),
+                      buildTableCell('28-91 gün'),
+                      buildTableCell('92-182 gün'),
+                      buildTableCell('183-364 gün'),
+                      buildTableCell('365-730 gün'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('25.000-\n99.999 USD'),
+                      buildTableCell('25.000-\n99.999 USD'),
                       buildTableCell(
                           '% ${dolarFaizOranlari[0][0].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -490,7 +488,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                           '% ${dolarFaizOranlari[3][0].toStringAsFixed(2)}'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('100.000-\n249.999 USD'),
+                      buildTableCell('100.000-\n249.999 USD'),
                       buildTableCell(
                           '% ${dolarFaizOranlari[0][1].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -501,7 +499,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                           '% ${dolarFaizOranlari[3][1].toStringAsFixed(2)}'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('250.000-\n499.999 USD'),
+                      buildTableCell('250.000-\n499.999 USD'),
                       buildTableCell(
                           '% ${dolarFaizOranlari[0][2].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -512,7 +510,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                           '% ${dolarFaizOranlari[3][2].toStringAsFixed(2)}'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('500.000-\n1.000.000 USD'),
+                      buildTableCell('500.000-\n1.000.000 USD'),
                       buildTableCell(
                           '% ${dolarFaizOranlari[0][3].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -539,13 +537,13 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                   children: [
                     TableRow(children: [
                       buildTableCell(''),
-                      buildScrollableCell('28-91 gün'),
-                      buildScrollableCell('92-182 gün'),
-                      buildScrollableCell('183-364 gün'),
-                      buildScrollableCell('365-730 gün'),
+                      buildTableCell('28-91 gün'),
+                      buildTableCell('92-182 gün'),
+                      buildTableCell('183-364 gün'),
+                      buildTableCell('365-730 gün'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('50.000-\n99.999 EUR'),
+                      buildTableCell('50.000-\n99.999 EUR'),
                       buildTableCell(
                           '% ${euroFaizOranlari[0][0].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -556,7 +554,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                           '% ${euroFaizOranlari[3][0].toStringAsFixed(2)}'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('100.000-\n249.999 EUR'),
+                      buildTableCell('100.000-\n249.999 EUR'),
                       buildTableCell(
                           '% ${euroFaizOranlari[0][1].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -567,7 +565,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                           '% ${euroFaizOranlari[3][1].toStringAsFixed(2)}'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('250.000-\n499.999 EUR'),
+                      buildTableCell('250.000-\n499.999 EUR'),
                       buildTableCell(
                           '% ${euroFaizOranlari[0][2].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -578,7 +576,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
                           '% ${euroFaizOranlari[3][2].toStringAsFixed(2)}'),
                     ]),
                     TableRow(children: [
-                      buildScrollableCell('500.000-\n1.000.000 EUR'),
+                      buildTableCell('500.000-\n1.000.000 EUR'),
                       buildTableCell(
                           '% ${euroFaizOranlari[0][3].toStringAsFixed(2)}'),
                       buildTableCell(
@@ -596,11 +594,6 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
         ),
       )),
     );
-  }
-
-  SingleChildScrollView buildScrollableCell(String text) {
-    return SingleChildScrollView(
-        scrollDirection: Axis.horizontal, child: TableCell(child: Text(text)));
   }
 
   TableCell buildTableCell(String text) {
