@@ -4,6 +4,7 @@ import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/mai
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 
 import '../../pages/calculation_pages/calculation_page.dart';
+import '../../pages/leaderboard_page.dart';
 import '../../pages/prices_pages/loading_screen_prices.dart';
 
 class AppBarDrawer extends StatefulWidget {
@@ -49,7 +50,14 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
           ListTile(
             leading: const Icon(Icons.leaderboard),
             title: const Text('Leaderboard'),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LeaderboardPage(),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(Icons.calculate),
