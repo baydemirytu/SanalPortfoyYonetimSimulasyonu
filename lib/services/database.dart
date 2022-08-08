@@ -5,7 +5,7 @@ class DatabaseService {
   DatabaseService({required this.uid});
 
   // collection reference
-  final CollectionReference brewCollection =
+  final CollectionReference userCollection =
       FirebaseFirestore.instance.collection('users');
 
   Future<void> updateUserData(
@@ -14,7 +14,7 @@ class DatabaseService {
       String userEmail,
       double userBalance,
       bool wantedToBeInLeaderBoard) async {
-    return await brewCollection.doc(uid).set({
+    return await userCollection.doc(uid).set({
       'First name': firstName,
       'Last name': lastName,
       'Email': userEmail,
