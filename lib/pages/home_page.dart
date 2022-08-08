@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../constants/widgets/app_bar_drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -35,7 +36,11 @@ class _HomePageState extends State<HomePage> {
                     style: const TextStyle(fontSize: 36),
                   );
                 }
-                return const Text('Loading');
+                return const Center(
+                  child: SpinKitFadingCircle(
+                    color: Colors.white,
+                  ),
+                );
               }),
             ),
           ],
