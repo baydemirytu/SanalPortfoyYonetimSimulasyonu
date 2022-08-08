@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/transaction_screen.dart';
 
 //Bazi seyler hard coded, cunku api yi degistirmemiz gerekecek.
 //Duzgun bir api buldukltan sonra kalabaligi alacagim.
@@ -130,28 +131,32 @@ class _PriceScreenState extends State<PriceScreen> {
               //Sonra yukselme-alcalmaya gore degisecek sekilde yapmayi planliyorum.
               //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                currencyCard(
-                    '🇺🇸', 'USD', 'Amerikan Doları', usdPrice, usdPrice),
-                currencyCard(
-                    '🇪🇺', 'EUR', 'Avrupa Para Birimi', eurPrice, eurPrice),
-                currencyCard(
-                    '🇬🇧', 'GBP', 'İngiliz Sterlini', gbpPrice, gbpPrice),
-                currencyCard('🇦🇪', 'AED', 'Bae Dirhemi', aedPrice, aedPrice),
-                currencyCard(
-                    '🇦🇺', 'AUD', 'Avustralya Doları', audPrice, audPrice),
-                currencyCard(
-                    '🇨🇦', 'CAD', 'Kanada Doları', cadPrice, cadPrice),
-                currencyCard(
-                    '🇨🇭', 'CHF', 'İsviçre Frangı', chfPrice, chfPrice),
-                currencyCard(
-                    '🇩🇰', 'DKK', 'Danimarka Kronu', dkkPrice, dkkPrice),
-                currencyCard('🇯🇵', 'JPY', 'Japon Yeni', jpyPrice, jpyPrice),
-                currencyCard(
-                    '🇰🇼', 'KWD', 'Kuveyt Dinarı', kwdPrice, kwdPrice),
-                currencyCard('🇳🇴', 'NOK', 'Norveç Kronu', nokPrice, nokPrice),
-                currencyCard(
-                    '🇸🇦', 'SAR', 'Arabistan  Riyali', sarPrice, sarPrice),
-                currencyCard('🇸🇪', 'SEK', 'İsveç Kronu', sekPrice, sekPrice),
+                currencyCard('🇺🇸', 'USD', 'Amerikan Doları', usdPrice * 1.01,
+                    usdPrice * 0.99),
+                currencyCard('🇪🇺', 'EUR', 'Avrupa Para Birimi',
+                    eurPrice * 1.01, eurPrice * 0.99),
+                currencyCard('🇬🇧', 'GBP', 'İngiliz Sterlini', gbpPrice * 1.01,
+                    gbpPrice * 0.99),
+                currencyCard('🇦🇪', 'AED', 'Bae Dirhemi', aedPrice * 1.01,
+                    aedPrice * 0.99),
+                currencyCard('🇦🇺', 'AUD', 'Avustralya Doları',
+                    audPrice * 1.01, audPrice * 0.98),
+                currencyCard('🇨🇦', 'CAD', 'Kanada Doları', cadPrice * 1.01,
+                    cadPrice * 0.99),
+                currencyCard('🇨🇭', 'CHF', 'İsviçre Frangı', chfPrice * 1.01,
+                    chfPrice * 0.99),
+                currencyCard('🇩🇰', 'DKK', 'Danimarka Kronu', dkkPrice * 1.01,
+                    dkkPrice * 0.99),
+                currencyCard('🇯🇵', 'JPY', 'Japon Yeni', jpyPrice * 1.01,
+                    jpyPrice * 0.99),
+                currencyCard('🇰🇼', 'KWD', 'Kuveyt Dinarı', kwdPrice * 1.01,
+                    kwdPrice * 0.99),
+                currencyCard('🇳🇴', 'NOK', 'Norveç Kronu', nokPrice * 1.01,
+                    nokPrice * 0.99),
+                currencyCard('🇸🇦', 'SAR', 'Arabistan  Riyali',
+                    sarPrice * 1.01, sarPrice * 0.98),
+                currencyCard('🇸🇪', 'SEK', 'İsveç Kronu', sekPrice * 1.01,
+                    sekPrice * 0.99),
               ],
             ),
           ),
@@ -176,6 +181,11 @@ class _PriceScreenState extends State<PriceScreen> {
               width: 90,
               child: OutlinedButton(
                   onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return TransactionScreen(
+                          currencyCode, 'Alım', buyPrice, flag);
+                    }));
                     print(
                         'Kullanici $buyPrice dan $currencyCode almak istiyor');
                   },
@@ -184,7 +194,7 @@ class _PriceScreenState extends State<PriceScreen> {
                     children: [
                       Text(
                         buyPrice.toStringAsFixed(4),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                       const Text(
                         'Al',
@@ -200,6 +210,11 @@ class _PriceScreenState extends State<PriceScreen> {
               width: 84,
               child: OutlinedButton(
                   onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return TransactionScreen(
+                          currencyCode, 'Satım', sellPrice, flag);
+                    }));
                     print(
                         'Kullanici $sellPrice dan $currencyCode satmak istiyor');
                   },
@@ -208,7 +223,7 @@ class _PriceScreenState extends State<PriceScreen> {
                     children: [
                       Text(
                         sellPrice.toStringAsFixed(4),
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                       const Text(
                         'Sat',
@@ -219,7 +234,7 @@ class _PriceScreenState extends State<PriceScreen> {
             ),
           ],
         ),
-        title: Text(currencyCode, style: TextStyle(color: Colors.white)),
+        title: Text(currencyCode, style: const TextStyle(color: Colors.white)),
         subtitle: Text(currencyName),
       ),
     );
