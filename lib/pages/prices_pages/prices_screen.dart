@@ -175,7 +175,10 @@ class _PriceScreenState extends State<PriceScreen> {
             SizedBox(
               width: 90,
               child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    print(
+                        'Kullanici $buyPrice dan $currencyCode almak istiyor');
+                  },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -196,7 +199,10 @@ class _PriceScreenState extends State<PriceScreen> {
             SizedBox(
               width: 84,
               child: OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    print(
+                        'Kullanici $sellPrice dan $currencyCode satmak istiyor');
+                  },
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
