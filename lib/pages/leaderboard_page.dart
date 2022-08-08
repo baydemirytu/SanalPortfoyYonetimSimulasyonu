@@ -18,6 +18,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     await FirebaseFirestore.instance
         .collection('users')
         .orderBy('Balance', descending: true)
+        .where('OnTheLeaderBoard', isEqualTo: true)
         .get()
         .then(
           (snapshot) => snapshot.docs.forEach(
