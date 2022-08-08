@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/main_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
-
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/settings_page.dart';
 import '../../pages/calculation_pages/calculation_page.dart';
 import '../../pages/leaderboard_page.dart';
 import '../../pages/prices_pages/loading_screen_prices.dart';
@@ -87,7 +87,14 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
           ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingsPage(),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(Icons.power_settings_new),

@@ -1,10 +1,10 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/constants/functions/customShowDialog.dart'
     as CSD;
+import 'package:sanal_portfoy_yonetim_simulasyonu/services/database.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -23,33 +23,21 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController balanceController = TextEditingController();
   bool wantedToBeInLeaderBoard = false;
 
-  Future addUserDetails(String firstName, String lastName, String userEmail,
-      double userBalance) async {
-    await FirebaseFirestore.instance.collection('users').add(
-      {
-        'First name': firstName,
-        'Last name': lastName,
-        'Email': userEmail,
-        'Balance': userBalance,
-        'OnTheLeaderBoard': wantedToBeInLeaderBoard,
-      },
-    );
-  }
-
   Future signUp() async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential result =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: mailController.text.trim(),
         password: passwordController.text.trim(),
       );
+      await DatabaseService(uid: result.user!.uid).updateUserData(
+          nameController.text,
+          surnameController.text,
+          mailController.text,
+          double.parse(balanceController.text),
+          wantedToBeInLeaderBoard);
       CSD.CustomShowDialog.showDialog(context,
           "User created and verification email sent to ${mailController.text.trim()}. Do not forget to check spam folder!");
-      addUserDetails(
-        nameController.text.trim(),
-        surnameController.text.trim(),
-        mailController.text.trim(),
-        double.parse(balanceController.text),
-      );
     } on FirebaseAuthException catch (e) {
       CSD.CustomShowDialog.showDialog(context, e.message.toString());
     }
