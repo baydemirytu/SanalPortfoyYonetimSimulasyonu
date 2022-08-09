@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
                   Map<String, dynamic> data =
                       snapshot.data!.data() as Map<String, dynamic>;
                   return Text(
-                    'Your balance is ${data['Balance']} TL',
+                    'Your balance is ${data['Current Balance']} TL',
                     style: const TextStyle(fontSize: 36),
                   );
                 }

@@ -20,7 +20,7 @@ class GetUserName extends StatelessWidget {
               Expanded(
                   flex: 7,
                   child: Text('${data['First name']} ${data['Last name']}')),
-              Expanded(flex: 3, child: Text('${data['Balance']}')),
+              Expanded(flex: 3, child: Text('${data['Initial Balance']}')),
             ],
           );
         }

@@ -17,8 +17,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   Future getDocIDs() async {
     await FirebaseFirestore.instance
         .collection('users')
-        .orderBy('Balance', descending: true)
-        .where('OnTheLeaderBoard', isEqualTo: true)
+        .orderBy('Initial Balance', descending: true)
+        .where('On The Leader Board', isEqualTo: true)
         .get()
         .then(
           (snapshot) => snapshot.docs.forEach(
