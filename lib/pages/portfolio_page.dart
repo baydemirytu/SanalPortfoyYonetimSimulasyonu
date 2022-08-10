@@ -1,7 +1,6 @@
-import 'dart:ffi';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 
 class PortfolioScreen extends StatefulWidget {
@@ -12,6 +11,54 @@ class PortfolioScreen extends StatefulWidget {
 }
 
 class _PortfolioScreenState extends State<PortfolioScreen> {
+  final user = FirebaseAuth.instance.currentUser!;
+  final Map<String, double> portfolioElements = {};
+  Future getPortfolioElements() async {
+    DocumentSnapshot variable = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    var elements = variable.get('Yatırım.Döviz');
+
+    elements
+        .forEach((k, v) => v > 0 ? portfolioElements[k.toString()] = v : null);
+
+    portfolioElements.keys.toList().sort();
+  }
+
+  final Map<String?, String> currencyEmojis = {
+    'USD': '🇺🇸',
+    'EUR': '🇪🇺',
+    'GBP': '🇬🇧',
+    'AED': '🇦🇪',
+    'AUD': '🇦🇺',
+    'CAD': '🇨🇦',
+    'CHF': '🇨🇭',
+    'DKK': '🇩🇰',
+    'JPY': '🇯🇵',
+    'KWD': '🇰🇼',
+    'NOK': '🇳🇴',
+    'SAR': '🇸🇦',
+    'SEK': '🇸🇪',
+  };
+
+  final Map<String?, String> currencyNames = {
+    'USD': 'Amerikan Doları',
+    'EUR': 'Avrupa Para Birimi',
+    'GBP': 'İngiliz Sterlini',
+    'AED': 'Bae Dirhemi',
+    'AUD': 'Avustralya Doları',
+    'CAD': 'Kanada Doları',
+    'CHF': 'İsviçre Frangı',
+    'DKK': 'Danimarka Kronu',
+    'JPY': 'Japon Yeni',
+    'KWD': 'Kuveyt Dinarı',
+    'NOK': 'Norveç Kronu',
+    'SAR': 'Arabistan  Riyali',
+    'SEK': 'İsveç Kronu',
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,31 +96,39 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
             ),
           ),
           Expanded(
-            child: ListView(
-              children: [
-                portfolioCard('🇦🇺', 'AUD', 'Avustralya Doları', 0),
-                portfolioCard('🇨🇦', 'CAD', 'Kanada Doları', 50),
-                portfolioCard('🇯🇵', 'JPY', 'Japon Yeni', 233),
-                portfolioCard('🇸🇦', 'SAR', 'Arabistan  Riyali', 488.5),
-              ],
+            child: FutureBuilder(
+              future: getPortfolioElements(),
+              builder: (context, index) {
+                return ListView.builder(
+                  itemCount: portfolioElements.values.length,
+                  itemBuilder: ((context, index) {
+                    return portfolioCard(
+                      currencyEmojis[portfolioElements.keys.elementAt(index)],
+                      portfolioElements.keys.elementAt(index),
+                      currencyNames[portfolioElements.keys.elementAt(index)],
+                      portfolioElements.values.elementAt(index),
+                    );
+                  }),
+                );
+              },
             ),
-          ),
+          )
         ],
       ),
     );
   }
 
   Card portfolioCard(
-      String flag, String currencyCode, String currencyName, double owned) {
+      String? flag, String currencyCode, String? currencyName, double owned) {
     return Card(
       color: Colors.black54,
       child: ListTile(
         leading: Text(
-          flag,
+          flag!,
           style: TextStyle(fontSize: 32),
         ),
         title: Text(currencyCode, style: const TextStyle(color: Colors.white)),
-        subtitle: Text(currencyName),
+        subtitle: Text(currencyName!),
         trailing: Text("$owned"),
       ),
     );
