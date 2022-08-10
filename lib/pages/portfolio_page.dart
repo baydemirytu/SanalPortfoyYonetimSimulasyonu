@@ -24,6 +24,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     elements
         .forEach((k, v) => v > 0 ? portfolioElements[k.toString()] = v : null);
 
+    // not sure about this line
     portfolioElements.keys.toList().sort();
   }
 
