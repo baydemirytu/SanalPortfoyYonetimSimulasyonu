@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class VadeliMevduatHesaplama extends StatefulWidget {
   const VadeliMevduatHesaplama({Key? key}) : super(key: key);
@@ -9,6 +12,8 @@ class VadeliMevduatHesaplama extends StatefulWidget {
 }
 
 class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
+  final user = FirebaseAuth.instance.currentUser!;
+
   TextEditingController anaParaController = TextEditingController();
 
   bool anaParaValidate = true;
@@ -144,6 +149,7 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
       } else {
         netGetiri = brutGetiri;
       }
+      netGetiri = double.parse(netGetiri.toStringAsFixed(2));
       netMessage =
           '% $faizOrani faiz ile net getiri: ${netGetiri.toStringAsFixed(2)} $dropdownValue';
     }
@@ -174,8 +180,9 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
       } else {
         netGetiri = brutGetiri * 0.82;
       }
+      netGetiri = double.parse(netGetiri.toStringAsFixed(2));
       netMessage =
-          '% $faizOrani faiz ile net getiri: ${netGetiri.toStringAsFixed(2)} $dropdownValue';
+          '% $faizOrani faiz ile net getiri: $netGetiri $dropdownValue';
     }
   }
 
@@ -204,8 +211,9 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
       } else {
         netGetiri = brutGetiri * 0.82;
       }
+      netGetiri = double.parse(netGetiri.toStringAsFixed(2));
       netMessage =
-          '% $faizOrani faiz ile net getiri: ${netGetiri.toStringAsFixed(2)} $dropdownValue';
+          '% $faizOrani faiz ile net getiri: $netGetiri $dropdownValue';
     }
   }
 
@@ -319,25 +327,52 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
             ),
             Text('$vadegun gün'),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                if (dropdownValue == 'TRY') {
-                  liraFaizHesapla();
-                } else if (dropdownValue == 'USD') {
-                  dolarFaizHesapla();
-                } else if (dropdownValue == 'EUR') {
-                  euroFaizHesapla();
-                }
-                setState(() {});
-              },
-              child: const Text(
-                'Hesapla',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    if (dropdownValue == 'TRY') {
+                      liraFaizHesapla();
+                    } else if (dropdownValue == 'USD') {
+                      dolarFaizHesapla();
+                    } else if (dropdownValue == 'EUR') {
+                      euroFaizHesapla();
+                    }
+                    setState(() {});
+                  },
+                  child: const Text(
+                    'Hesapla',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15),
+                  ),
+                ),
+                ElevatedButton(
+                  child: const Text(
+                    'Yatırım',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15),
+                  ),
+                  onPressed: () async {
+                    if (dropdownValue == 'TRY') {
+                      liraFaizHesapla();
+                      vadeliLiraYatirim();
+                    } else if (dropdownValue == 'USD') {
+                      dolarFaizHesapla();
+                      vadeliDovizYatirim('USD');
+                    } else if (dropdownValue == 'EUR') {
+                      euroFaizHesapla();
+                      vadeliDovizYatirim('EUR');
+                    }
+                    setState(() {});
+                  },
+                ),
+              ],
             ),
             const SizedBox(
               height: 10,
@@ -603,6 +638,171 @@ class _VadeliMevduatHesaplamaState extends State<VadeliMevduatHesaplama> {
           text,
           textAlign: TextAlign.center,
         ));
+  }
+
+  void vadeliLiraYatirim() async {
+    if (anaParaValidate) {
+      DocumentSnapshot variable = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      FocusManager.instance.primaryFocus?.unfocus();
+      int? anaPara = int.tryParse(anaParaController.text);
+
+      if (variable.get('Yatırım.Vadeli Mevduat.TRY.Aktif') == true) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              title: Text('UYARI!'),
+              content: Text(
+                  'Öncelikle TRY vadeli mevduatınızın bitmesi veya iptal edilmesi gerekmektedir!'),
+            );
+          },
+        );
+      } else {
+        if (anaPara != null && variable.get('Current Balance') >= anaPara) {
+          double newBalance =
+              variable.get('Current Balance') - anaPara.toDouble();
+
+          final docUser =
+              FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+          DateTime startTime = DateTime(
+              DateTime.now().year, DateTime.now().month, DateTime.now().day);
+          String yatirmaTarihi = DateFormat('dd-MM-yyyy').format(startTime);
+          DateTime endTime = DateTime(DateTime.now().year, DateTime.now().month,
+              DateTime.now().day + vadegun);
+          String vadeTarihi = DateFormat('dd-MM-yyyy').format(endTime);
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('İşleminizi Onaylayın'),
+                content: Text(
+                    'Yatırılacak Miktar: $anaPara TRY\nVade: $vadegun gün\n'
+                    'Bitiş Tarihi: $vadeTarihi\n'
+                    'Faiz Oranı: % $faizOrani\n'
+                    'Vade Sonu Net Getiri: $netGetiri'),
+                actions: [
+                  MaterialButton(
+                    child: const Text('Onayla!'),
+                    onPressed: () {
+                      docUser.update({
+                        'Current Balance': newBalance,
+                        'Yatırım.Vadeli Mevduat.TRY.Aktif': true,
+                        'Yatırım.Vadeli Mevduat.TRY.Anapara': anaPara,
+                        'Yatırım.Vadeli Mevduat.TRY.Faiz': faizOrani,
+                        'Yatırım.Vadeli Mevduat.TRY.Yatırma Tarihi':
+                            yatirmaTarihi,
+                        'Yatırım.Vadeli Mevduat.TRY.Vade Gün': vadegun,
+                        'Yatırım.Vadeli Mevduat.TRY.Vade Tarihi': vadeTarihi,
+                        'Yatırım.Vadeli Mevduat.TRY.Net Getiri': netGetiri,
+                      });
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Yatırım Başarılı!')));
+                    },
+                  ),
+                  MaterialButton(
+                      child: const Text('İptal'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              );
+            },
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('TRY Bakiyesi Yetersiz')));
+        }
+      }
+    }
+  }
+
+  void vadeliDovizYatirim(String doviz) async {
+    if (anaParaValidate) {
+      DocumentSnapshot variable = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      FocusManager.instance.primaryFocus?.unfocus();
+      int? anaPara = int.tryParse(anaParaController.text);
+
+      if (variable.get('Yatırım.Vadeli Mevduat.$doviz.Aktif') == true) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('UYARI!'),
+              content: Text(
+                  'Öncelikle $doviz vadeli mevduatınızın bitmesi veya iptal edilmesi gerekmektedir!'),
+            );
+          },
+        );
+      } else {
+        if (anaPara != null &&
+            variable.get('Yatırım.Döviz.$doviz') >= anaPara) {
+          double newBalance =
+              variable.get('Yatırım.Döviz.$doviz') - anaPara.toDouble();
+
+          final docUser =
+              FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+          DateTime startTime = DateTime(
+              DateTime.now().year, DateTime.now().month, DateTime.now().day);
+          String yatirmaTarihi = DateFormat('dd-MM-yyyy').format(startTime);
+          DateTime endTime = DateTime(DateTime.now().year, DateTime.now().month,
+              DateTime.now().day + vadegun);
+          String vadeTarihi = DateFormat('dd-MM-yyyy').format(endTime);
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('İşleminizi Onaylayın'),
+                content: Text(
+                    'Yatırılacak Miktar: $anaPara $doviz\nVade: $vadegun gün\n'
+                    'Bitiş Tarihi: $vadeTarihi\n'
+                    'Faiz Oranı: % $faizOrani\n'
+                    'Vade Sonu Net Getiri: $netGetiri $doviz'),
+                actions: [
+                  MaterialButton(
+                    child: const Text('Onayla!'),
+                    onPressed: () {
+                      docUser.update({
+                        'Yatırım.Döviz.$doviz': newBalance,
+                        'Yatırım.Vadeli Mevduat.$doviz.Aktif': true,
+                        'Yatırım.Vadeli Mevduat.$doviz.Anapara': anaPara,
+                        'Yatırım.Vadeli Mevduat.$doviz.Faiz': faizOrani,
+                        'Yatırım.Vadeli Mevduat.$doviz.Yatırma Tarihi':
+                            yatirmaTarihi,
+                        'Yatırım.Vadeli Mevduat.$doviz.Vade Gün': vadegun,
+                        'Yatırım.Vadeli Mevduat.$doviz.Vade Tarihi': vadeTarihi,
+                        'Yatırım.Vadeli Mevduat.$doviz.Net Getiri': netGetiri,
+                      });
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Yatırım Başarılı!')));
+                    },
+                  ),
+                  MaterialButton(
+                      child: const Text('İptal'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      })
+                ],
+              );
+            },
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('$doviz Bakiyesi Yetersiz')));
+        }
+      }
+    }
   }
 
   @override
