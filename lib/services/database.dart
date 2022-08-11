@@ -38,6 +38,11 @@ class DatabaseService {
             'SAR': 0.0,
             'SEK': 0.0,
           },
+          'Vadeli Mevduat': {
+            'TRY': {'Aktif': false},
+            'USD': {'Aktif': false},
+            'EUR': {'Aktif': false}
+          }
         },
       },
     );
