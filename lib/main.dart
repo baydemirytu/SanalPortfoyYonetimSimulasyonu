@@ -10,14 +10,67 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  var introduction = prefs.getBool("intro");
-
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(colorScheme: darkTheme),
-      home: introduction == null ? const IntroductionPage() : const MainPage(),
+      home: const SplashScreen(),
     ),
   );
+}
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  var introduction;
+
+  Future getIntroduction() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    introduction = prefs.getBool("intro");
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getIntroduction();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () {
+          introduction == null
+              ? (Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const IntroductionPage(),
+                  ),
+                ))
+              : (Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MainPage(),
+                  ),
+                ));
+        },
+        child: Scaffold(
+          body: Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: const [
+              Text(
+                'SGMK',
+                style: TextStyle(fontSize: 40),
+              ),
+              Text('Devam etmek için dokunun...')
+            ],
+          )),
+        ));
+  }
 }

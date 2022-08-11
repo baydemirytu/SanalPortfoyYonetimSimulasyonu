@@ -56,7 +56,14 @@ class IntroductionPage extends StatelessWidget {
             ),
           );
         },
-        onSkip: () {},
+        onSkip: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MainPage(),
+            ),
+          );
+        },
       ),
     );
   }
