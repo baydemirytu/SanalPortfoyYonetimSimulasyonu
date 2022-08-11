@@ -292,27 +292,27 @@ class _DovizHesaplamaState extends State<DovizHesaplama> {
             const SizedBox(
               height: 20,
             ),
-            buildListTile('🇹🇷', 'TRY', lira),
-            buildListTile('🇺🇸', 'USD', dolar),
-            buildListTile('🇪🇺', 'EUR', euro),
-            buildListTile('🇬🇧', 'GBP', pound),
-            buildListTile('🇦🇪', 'AED', aed),
-            buildListTile('🇦🇺', 'AUD', aud),
-            buildListTile('🇨🇦', 'CAD', cad),
-            buildListTile('🇨🇭', 'CHF', chf),
-            buildListTile('🇩🇰', 'DKK', dkk),
-            buildListTile('🇯🇵', 'JPY', jpy),
-            buildListTile('🇰🇼', 'KWD', kwd),
-            buildListTile('🇳🇴', 'NOK', nok),
-            buildListTile('🇸🇦', 'SAR', sar),
-            buildListTile('🇸🇪', 'SEK', sek),
+            buildListTile(currencyEmojis['TRY'], 'TRY', lira),
+            buildListTile(currencyEmojis['USD'], 'USD', dolar),
+            buildListTile(currencyEmojis['EUR'], 'EUR', euro),
+            buildListTile(currencyEmojis['GBP'], 'GBP', pound),
+            buildListTile(currencyEmojis['AED'], 'AED', aed),
+            buildListTile(currencyEmojis['AUD'], 'AUD', aud),
+            buildListTile(currencyEmojis['CAD'], 'CAD', cad),
+            buildListTile(currencyEmojis['CHF'], 'CHF', chf),
+            buildListTile(currencyEmojis['DKK'], 'DKK', dkk),
+            buildListTile(currencyEmojis['JPY'], 'JPY', jpy),
+            buildListTile(currencyEmojis['KWD'], 'KWD', kwd),
+            buildListTile(currencyEmojis['NOK'], 'NOK', nok),
+            buildListTile(currencyEmojis['SAR'], 'SAR', sar),
+            buildListTile(currencyEmojis['SEK'], 'SEK', sek),
           ],
         ),
       ),
     );
   }
 
-  Padding buildListTile(String flag, String country, double currency) {
+  Padding buildListTile(String? flag, String country, double currency) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Container(
@@ -322,7 +322,7 @@ class _DovizHesaplamaState extends State<DovizHesaplama> {
         ),
         child: ListTile(
           leading: Text(
-            flag,
+            flag!,
             style: const TextStyle(fontSize: 25),
           ),
           title: Text(country),
