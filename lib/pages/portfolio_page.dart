@@ -120,19 +120,24 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           FutureBuilder(
             future: getPortfolioElements(),
             builder: ((context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: PieChart(
-                  dataMap: portfolioElements,
-                  chartRadius: MediaQuery.of(context).size.width / 2,
-                  chartType: ChartType.ring,
-                  ringStrokeWidth: 16,
-                  chartValuesOptions: const ChartValuesOptions(
-                    showChartValuesInPercentage: true,
-                    showChartValuesOutside: false,
+              if (portfolioElements.length == 0) {
+                return Container();
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: PieChart(
+                    dataMap: portfolioElements,
+                    chartRadius: MediaQuery.of(context).size.width / 2,
+                    chartType: ChartType.ring,
+                    ringStrokeWidth: 16,
+                    chartValuesOptions: const ChartValuesOptions(
+                      decimalPlaces: 2,
+                      showChartValuesInPercentage: true,
+                      showChartValuesOutside: false,
+                    ),
                   ),
-                ),
-              );
+                );
+              }
             }),
           ),
           Expanded(

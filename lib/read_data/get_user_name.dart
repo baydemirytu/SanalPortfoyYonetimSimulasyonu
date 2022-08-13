@@ -15,16 +15,26 @@ class GetUserName extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;
+          double yuzde = (data['Current Balance'] - data['Initial Balance']) /
+              data['Initial Balance'] *
+              100;
+
           return Row(
             children: [
               Expanded(
                   flex: 7,
                   child: Text('${data['First name']} ${data['Last name']}')),
-              Expanded(flex: 3, child: Text('${data['Initial Balance']}')),
+              Expanded(
+                  flex: 3,
+                  child: Text(
+                    '% ${yuzde.toStringAsFixed(3)}',
+                    style: TextStyle(
+                        color: yuzde >= 0 ? Colors.green : Colors.red),
+                  )),
             ],
           );
         }
-        return Text('Loading');
+        return const Text('Loading');
       }),
     );
   }
