@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:pie_chart/pie_chart.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 import 'package:intl/intl.dart';
 
@@ -26,9 +27,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
     elements
         .forEach((k, v) => v > 0 ? portfolioElements[k.toString()] = v : null);
-
-    // not sure about this line
-    portfolioElements.keys.toList().sort();
   }
 
   Future getVadeliMevduatElements() async {
@@ -42,8 +40,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         mevduatBilgileri['Aktif'] == true
             ? vadeliMevduatElements[currency.toString()] = mevduatBilgileri
             : null);
-
-    print(vadeliMevduatElements);
   }
 
   Future getAllAssets() async {
@@ -121,6 +117,24 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               onChanged: (text) {},
             ),
           ),
+          FutureBuilder(
+            future: getPortfolioElements(),
+            builder: ((context, index) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: PieChart(
+                  dataMap: portfolioElements,
+                  chartRadius: MediaQuery.of(context).size.width / 2,
+                  chartType: ChartType.ring,
+                  ringStrokeWidth: 16,
+                  chartValuesOptions: const ChartValuesOptions(
+                    showChartValuesInPercentage: true,
+                    showChartValuesOutside: false,
+                  ),
+                ),
+              );
+            }),
+          ),
           Expanded(
             child: FutureBuilder(
               future: getAllAssets(),
@@ -152,7 +166,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                 );
               },
             ),
-          )
+          ),
         ],
       ),
     );

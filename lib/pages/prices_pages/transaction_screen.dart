@@ -105,9 +105,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
             padding: const EdgeInsets.all(10.0),
             child: TextField(
               keyboardType: TextInputType.number,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
-              ],
               style: const TextStyle(color: Colors.black),
               decoration: InputDecoration(
                 filled: true,
