@@ -349,9 +349,9 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
+                Icon(
                   Icons.savings_outlined,
-                  color: Colors.green,
+                  color: getiri > 0 ? Colors.green : Colors.red,
                   size: 40,
                 ),
                 Text(
@@ -363,11 +363,6 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.percent,
-                  size: 20,
-                  color: Colors.grey,
-                ),
                 const Icon(
                   Icons.percent,
                   size: 30,
