@@ -3,12 +3,11 @@ import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/transaction_screen.dart';
 
 class CryptoPriceScreen extends StatefulWidget {
-  CryptoPriceScreen(
-    this.btcData,
-    this.ethData,
-  );
+  CryptoPriceScreen(this.btcData, this.ethData, this.bnbData, this.curTime);
   final btcData;
   final ethData;
+  final bnbData;
+  final curTime;
 
   @override
   State<CryptoPriceScreen> createState() => _CryptoPriceScreenState();
@@ -17,28 +16,28 @@ class CryptoPriceScreen extends StatefulWidget {
 class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
   late double btcPrice;
   late double ethPrice;
+  late double bnbPrice;
+  late String currentTime;
 
   @override
   void initState() {
     super.initState();
     updatePrices(
-      widget.btcData,
-      widget.ethData,
-    );
+        widget.btcData, widget.ethData, widget.bnbData, widget.curTime);
   }
 
-  updatePrices(
-    dynamic btcData,
-    ethData,
-  ) {
-    btcPrice = btcData['result'];
-    ethPrice = ethData['result'];
+  updatePrices(dynamic btcData, ethData, bnbData, curTime) {
+    btcPrice = btcData['rate'];
+    ethPrice = ethData['rate'];
+    bnbPrice = bnbData['rate'];
+    currentTime = curTime;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {
@@ -46,7 +45,16 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
                 return const HomePage();
               }));
             }),
-        title: const Text('Fiyatlar'),
+        title: Column(
+          children: [
+            Text('Fiyatlar'),
+            SizedBox(height: 8),
+            Text(
+              'Son Güncelleme: $currentTime',
+              style: TextStyle(fontSize: 12),
+            )
+          ],
+        ),
       ),
       body: Column(
         children: [
@@ -57,7 +65,7 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
               decoration: const InputDecoration(
                 filled: true,
                 fillColor: Colors.white,
-                hintText: 'Döviz ismi arayın',
+                hintText: 'Kripto para ismi arayın',
                 hintStyle: TextStyle(
                   color: Colors.grey,
                 ),
@@ -79,9 +87,11 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
               //crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 currencyCard(
-                    '🇺🇸', 'BTC', 'Bitcoin', btcPrice * 1.01, btcPrice * 0.99),
-                currencyCard('🇪🇺', 'ETH', 'Ethereum', ethPrice * 1.01,
-                    ethPrice * 0.99),
+                    '', 'BTC', 'Bitcoin', btcPrice * 1.01, btcPrice * 0.99),
+                currencyCard(
+                    '', 'ETH', 'Ethereum', ethPrice * 1.01, ethPrice * 0.99),
+                currencyCard(
+                    '', 'BNB', 'Binance Coin', bnbPrice * 1.01, bnbPrice * 0.99)
               ],
             ),
           ),
@@ -95,21 +105,17 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
     return Card(
       color: Colors.black54,
       child: ListTile(
-        leading: Text(
-          flag,
-          style: TextStyle(fontSize: 32),
-        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
-              width: 90,
+              width: 110,
               child: OutlinedButton(
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return TransactionScreen(
-                          currencyCode, 'Alım', buyPrice, flag);
+                          currencyCode, 'Alım', buyPrice, '🪙');
                     }));
                     print(
                         'Kullanici $buyPrice dan $currencyCode almak istiyor');
@@ -118,7 +124,7 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        buyPrice.toStringAsFixed(4),
+                        buyPrice.toStringAsFixed(2),
                         style: const TextStyle(color: Colors.white),
                       ),
                       const Text(
@@ -132,13 +138,13 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
               width: 10,
             ),
             SizedBox(
-              width: 90,
+              width: 110,
               child: OutlinedButton(
                   onPressed: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return TransactionScreen(
-                          currencyCode, 'Satım', sellPrice, flag);
+                          currencyCode, 'Satım', sellPrice, '🪙');
                     }));
                     print(
                         'Kullanici $sellPrice dan $currencyCode satmak istiyor');
@@ -147,7 +153,7 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        sellPrice.toStringAsFixed(4),
+                        sellPrice.toStringAsFixed(2),
                         style: const TextStyle(color: Colors.white),
                       ),
                       const Text(

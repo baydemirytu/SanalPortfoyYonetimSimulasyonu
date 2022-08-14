@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/networking.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/prices_screen_forex.dart';
 
@@ -69,6 +71,10 @@ class _ForexPricesLoadingState extends State<ForexPricesLoading> {
         'https://api.exchangerate.host/convert?from=$choosenPair&to=TRY');
     var sekData = await myNetworkHelper.requestData();
 
+    DateTime now = new DateTime.now();
+    var formatter = new DateFormat.Hm();
+    String formattedDate = formatter.format(now);
+
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return ForexPriceScreen(
           usdData,
@@ -83,7 +89,8 @@ class _ForexPricesLoadingState extends State<ForexPricesLoading> {
           kwdData,
           nokData,
           sarData,
-          sekData);
+          sekData,
+          formattedDate);
     }));
   }
 
@@ -95,9 +102,18 @@ class _ForexPricesLoadingState extends State<ForexPricesLoading> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(' Data loading, a good loading screen will be added forex'),
+    return Scaffold(
+      body: ModalProgressHUD(
+        inAsyncCall: true,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 100),
+              Text('Fiyatlar yükleniyor...'),
+            ],
+          ),
+        ),
       ),
     );
   }

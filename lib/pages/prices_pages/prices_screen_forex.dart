@@ -16,7 +16,8 @@ class ForexPriceScreen extends StatefulWidget {
       this.kwdData,
       this.nokData,
       this.sarData,
-      this.sekData);
+      this.sekData,
+      this.curTime);
   final usdData;
   final eurData;
   final gbpData;
@@ -30,6 +31,7 @@ class ForexPriceScreen extends StatefulWidget {
   final nokData;
   final sarData;
   final sekData;
+  final curTime;
 
   @override
   State<ForexPriceScreen> createState() => _ForexPriceScreenState();
@@ -49,6 +51,7 @@ class _ForexPriceScreenState extends State<ForexPriceScreen> {
   late double nokPrice;
   late double sarPrice;
   late double sekPrice;
+  late String currentTime;
   @override
   void initState() {
     super.initState();
@@ -65,11 +68,12 @@ class _ForexPriceScreenState extends State<ForexPriceScreen> {
         widget.kwdData,
         widget.nokData,
         widget.sarData,
-        widget.sekData);
+        widget.sekData,
+        widget.curTime);
   }
 
   updatePrices(dynamic usdData, eurData, gbpData, aedData, audData, cadData,
-      chfData, dkkData, jpyData, kwdData, nokData, sarData, sekData) {
+      chfData, dkkData, jpyData, kwdData, nokData, sarData, sekData, curTime) {
     usdPrice = usdData['result'];
     eurPrice = eurData['result'];
     gbpPrice = gbpData['result'];
@@ -83,6 +87,7 @@ class _ForexPriceScreenState extends State<ForexPriceScreen> {
     nokPrice = nokData['result'];
     sarPrice = sarData['result'];
     sekPrice = sekData['result'];
+    currentTime = curTime;
   }
 
   @override
@@ -96,7 +101,16 @@ class _ForexPriceScreenState extends State<ForexPriceScreen> {
                 return const HomePage();
               }));
             }),
-        title: const Text('Fiyatlar'),
+        title: Column(
+          children: [
+            Text('Fiyatlar'),
+            SizedBox(height: 8),
+            Text(
+              'Son Güncelleme: $currentTime',
+              style: TextStyle(fontSize: 12),
+            )
+          ],
+        ),
       ),
       body: Column(
         children: [
