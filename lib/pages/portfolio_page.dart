@@ -15,6 +15,7 @@ class PortfolioScreen extends StatefulWidget {
 class _PortfolioScreenState extends State<PortfolioScreen> {
   final user = FirebaseAuth.instance.currentUser!;
   final Map<String, double> portfolioElements = {};
+  final Map<String, dynamic> kriptoElements = {};
   final Map<String, dynamic> vadeliMevduatElements = {};
 
   Future getPortfolioElements() async {
@@ -27,6 +28,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
     elements
         .forEach((k, v) => v > 0 ? portfolioElements[k.toString()] = v : null);
+  }
+
+  Future getKriptoElements() async {
+    DocumentSnapshot variable = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    var elements = variable.get('Yatırım.Kripto');
+
+    elements.forEach((k, v) => v > 0 ? kriptoElements[k.toString()] = v : null);
   }
 
   Future getVadeliMevduatElements() async {
@@ -44,6 +56,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
   Future getAllAssets() async {
     await getPortfolioElements();
+    await getKriptoElements();
     await getVadeliMevduatElements();
   }
 
@@ -79,6 +92,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     'SAR': 'Arabistan  Riyali',
     'SEK': 'İsveç Kronu',
     'TRY': 'Türk Lirası'
+  };
+
+  final Map<String?, String> kriptoNames = {
+    'BTC': 'Bitcoin',
+    'ETH': 'Ethereum',
+    'BNB': 'Binance Coin',
   };
 
   @override
@@ -146,8 +165,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               builder: (context, index) {
                 return ListView.builder(
                   itemCount: portfolioElements.values.length +
-                      vadeliMevduatElements.length -
-                      0,
+                      kriptoElements.values.length +
+                      vadeliMevduatElements.values.length,
                   itemBuilder: ((context, index) {
                     if (index < portfolioElements.values.length) {
                       return portfolioCard(
@@ -156,9 +175,20 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         currencyNames[portfolioElements.keys.elementAt(index)],
                         portfolioElements.values.elementAt(index),
                       );
+                    } else if (index <
+                        portfolioElements.values.length +
+                            kriptoElements.values.length) {
+                      return kriptoCard(
+                          kriptoElements.keys.elementAt(
+                              index - portfolioElements.values.length),
+                          kriptoNames[kriptoElements.keys.elementAt(
+                              index - portfolioElements.values.length)],
+                          kriptoElements.values.elementAt(
+                              index - portfolioElements.values.length));
                     } else {
-                      String key = vadeliMevduatElements.keys
-                          .elementAt(index - portfolioElements.values.length);
+                      String key = vadeliMevduatElements.keys.elementAt(index -
+                          portfolioElements.values.length -
+                          kriptoElements.values.length);
                       return vadeliMevduatCard(
                           currencyEmojis[key],
                           vadeliMevduatElements[key]['Anapara'],
@@ -186,6 +216,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
           flag!,
           style: const TextStyle(fontSize: 32),
         ),
+        title: Text(currencyCode, style: const TextStyle(color: Colors.white)),
+        subtitle: Text(currencyName!),
+        trailing: Text("$owned"),
+      ),
+    );
+  }
+
+  Card kriptoCard(String currencyCode, String? currencyName, double owned) {
+    return Card(
+      color: Colors.black54,
+      child: ListTile(
         title: Text(currencyCode, style: const TextStyle(color: Colors.white)),
         subtitle: Text(currencyName!),
         trailing: Text("$owned"),
