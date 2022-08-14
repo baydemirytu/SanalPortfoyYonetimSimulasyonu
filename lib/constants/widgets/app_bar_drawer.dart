@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/main_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/portfolio_page.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/loading_screen_crypto.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/settings_page.dart';
 import '../../pages/calculation_pages/calculation_page.dart';
 import '../../pages/leaderboard_page.dart';
-import '../../pages/prices_pages/loading_screen_prices.dart';
+import '../../pages/prices_pages/loading_screen_forex.dart';
 
 class AppBarDrawer extends StatefulWidget {
   const AppBarDrawer({Key? key}) : super(key: key);
@@ -74,12 +75,24 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
           ),
           ListTile(
             leading: const Icon(Icons.attach_money),
-            title: const Text('Fiyatlar'),
+            title: const Text('Döviz'),
             onTap: () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const PricesLoading(),
+                  builder: (context) => const ForexPricesLoading(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.currency_bitcoin),
+            title: const Text('Kripto Para'),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CryptoPricesLoading(),
                 ),
               );
             },

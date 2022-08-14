@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/transaction_screen.dart';
 
-//Bazi seyler hard coded, cunku api yi degistirmemiz gerekecek.
-//Duzgun bir api buldukltan sonra kalabaligi alacagim.
-
-class PriceScreen extends StatefulWidget {
-  PriceScreen(
+class ForexPriceScreen extends StatefulWidget {
+  ForexPriceScreen(
       this.usdData,
       this.eurData,
       this.gbpData,
@@ -35,10 +32,10 @@ class PriceScreen extends StatefulWidget {
   final sekData;
 
   @override
-  State<PriceScreen> createState() => _PriceScreenState();
+  State<ForexPriceScreen> createState() => _ForexPriceScreenState();
 }
 
-class _PriceScreenState extends State<PriceScreen> {
+class _ForexPriceScreenState extends State<ForexPriceScreen> {
   late double usdPrice;
   late double eurPrice;
   late double gbpPrice;

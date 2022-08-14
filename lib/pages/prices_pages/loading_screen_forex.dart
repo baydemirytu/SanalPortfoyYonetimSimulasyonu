@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/networking.dart';
-import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/prices_screen.dart';
-
-//Bazi seyler hard coded, cunku api yi degistirmemiz gerekecek.
-//Duzgun bir api buldukltan sonra kalabaligi alacagim.
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/prices_screen_forex.dart';
 
 //This page loads data
-class PricesLoading extends StatefulWidget {
-  const PricesLoading({Key? key}) : super(key: key);
+class ForexPricesLoading extends StatefulWidget {
+  const ForexPricesLoading({Key? key}) : super(key: key);
 
   @override
-  State<PricesLoading> createState() => _PricesLoadingState();
+  State<ForexPricesLoading> createState() => _ForexPricesLoadingState();
 }
 
-class _PricesLoadingState extends State<PricesLoading> {
+class _ForexPricesLoadingState extends State<ForexPricesLoading> {
   String choosenPair = '';
 
   void getCurrencyData() async {
@@ -73,8 +70,20 @@ class _PricesLoadingState extends State<PricesLoading> {
     var sekData = await myNetworkHelper.requestData();
 
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return PriceScreen(usdData, eurData, gbpData, aedData, audData, cadData,
-          chfData, dkkData, jpyData, kwdData, nokData, sarData, sekData);
+      return ForexPriceScreen(
+          usdData,
+          eurData,
+          gbpData,
+          aedData,
+          audData,
+          cadData,
+          chfData,
+          dkkData,
+          jpyData,
+          kwdData,
+          nokData,
+          sarData,
+          sekData);
     }));
   }
 
@@ -88,7 +97,7 @@ class _PricesLoadingState extends State<PricesLoading> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text(' Data loading, a good loading screen will be added'),
+        child: Text(' Data loading, a good loading screen will be added forex'),
       ),
     );
   }
