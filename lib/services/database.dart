@@ -38,6 +38,11 @@ class DatabaseService {
             'SAR': 0.0,
             'SEK': 0.0,
           },
+          'Kripto': {
+            'BTC': 0.0,
+            'ETH': 0.0,
+            'BNB': 0.0,
+          },
           'Vadeli Mevduat': {
             'TRY': {'Aktif': false},
             'USD': {'Aktif': false},

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
-import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/transaction_screen.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/transaction_screen_crypto.dart';
 
 class CryptoPriceScreen extends StatefulWidget {
   CryptoPriceScreen(this.btcData, this.ethData, this.bnbData, this.curTime);
