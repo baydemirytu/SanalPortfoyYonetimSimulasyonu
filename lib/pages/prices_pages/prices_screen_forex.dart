@@ -207,7 +207,7 @@ class _PriceScreenState extends State<PriceScreen> {
               width: 10,
             ),
             SizedBox(
-              width: 84,
+              width: 90,
               child: OutlinedButton(
                   onPressed: () {
                     Navigator.push(context,
