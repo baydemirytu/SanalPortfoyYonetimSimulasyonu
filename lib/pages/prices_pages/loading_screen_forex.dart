@@ -4,6 +4,8 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/networking.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/prices_screen_forex.dart';
 
+import '../portfolio_page.dart';
+
 //This page loads data
 class ForexPricesLoading extends StatefulWidget {
   const ForexPricesLoading({Key? key}) : super(key: key);
@@ -102,16 +104,26 @@ class _ForexPricesLoadingState extends State<ForexPricesLoading> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ModalProgressHUD(
-        inAsyncCall: true,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 100),
-              Text('Fiyatlar yükleniyor...'),
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PortfolioScreen(),
+            ));
+        return false;
+      },
+      child: Scaffold(
+        body: ModalProgressHUD(
+          inAsyncCall: true,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 100),
+                Text('Fiyatlar yükleniyor...'),
+              ],
+            ),
           ),
         ),
       ),

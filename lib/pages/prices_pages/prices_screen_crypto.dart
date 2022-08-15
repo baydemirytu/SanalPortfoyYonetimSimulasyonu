@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/portfolio_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/transaction_screen_crypto.dart';
 
 class CryptoPriceScreen extends StatefulWidget {
@@ -35,67 +35,77 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const HomePage();
-              }));
-            }),
-        title: Column(
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PortfolioScreen(),
+            ));
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const PortfolioScreen();
+                }));
+              }),
+          title: Column(
+            children: [
+              Text('Fiyatlar'),
+              SizedBox(height: 8),
+              Text(
+                'Son Güncelleme: $currentTime',
+                style: TextStyle(fontSize: 12),
+              )
+            ],
+          ),
+        ),
+        body: Column(
           children: [
-            Text('Fiyatlar'),
-            SizedBox(height: 8),
-            Text(
-              'Son Güncelleme: $currentTime',
-              style: TextStyle(fontSize: 12),
-            )
+            Container(
+              padding: const EdgeInsets.all(10.0),
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                decoration: const InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: 'Kripto para ismi arayın',
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                onChanged: (text) {},
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                //Fiyatlar anlik olarak cekiliyor, degerler dogru.
+                //Fiyatlarin renkleri hard coded, fikir versin diye boyle yapildi.
+                //Sonra yukselme-alcalmaya gore degisecek sekilde yapmayi planliyorum.
+                //crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  currencyCard(
+                      '', 'BTC', 'Bitcoin', btcPrice * 1.01, btcPrice * 0.99),
+                  currencyCard(
+                      '', 'ETH', 'Ethereum', ethPrice * 1.01, ethPrice * 0.99),
+                  currencyCard('', 'BNB', 'Binance Coin', bnbPrice * 1.01,
+                      bnbPrice * 0.99)
+                ],
+              ),
+            ),
           ],
         ),
-      ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
-              style: const TextStyle(color: Colors.black),
-              decoration: const InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Kripto para ismi arayın',
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (text) {},
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              //Fiyatlar anlik olarak cekiliyor, degerler dogru.
-              //Fiyatlarin renkleri hard coded, fikir versin diye boyle yapildi.
-              //Sonra yukselme-alcalmaya gore degisecek sekilde yapmayi planliyorum.
-              //crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                currencyCard(
-                    '', 'BTC', 'Bitcoin', btcPrice * 1.01, btcPrice * 0.99),
-                currencyCard(
-                    '', 'ETH', 'Ethereum', ethPrice * 1.01, ethPrice * 0.99),
-                currencyCard(
-                    '', 'BNB', 'Binance Coin', bnbPrice * 1.01, bnbPrice * 0.99)
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

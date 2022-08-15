@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
-import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 import 'package:intl/intl.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/constants/widgets/app_bar_drawer.dart';
 
 class PortfolioScreen extends StatefulWidget {
   const PortfolioScreen({Key? key}) : super(key: key);
@@ -103,39 +103,31 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const AppBarDrawer(),
       appBar: AppBar(
-        leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const HomePage();
-              }));
-            }),
-        title: const Text('Portfolio'),
+        title: const Text('Portföy'),
       ),
       body: Column(
         children: [
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(10.0),
-              child: TextField(
-                style: const TextStyle(color: Colors.black),
-                decoration: const InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  hintText: 'Döviz ismi arayın',
-                  hintStyle: TextStyle(
-                    color: Colors.grey,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                    borderSide: BorderSide.none,
-                  ),
+          Container(
+            padding: const EdgeInsets.all(10.0),
+            child: TextField(
+              style: const TextStyle(color: Colors.black),
+              decoration: const InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                hintText: 'Döviz ismi arayın',
+                hintStyle: TextStyle(
+                  color: Colors.grey,
                 ),
-                onChanged: (text) {},
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  borderSide: BorderSide.none,
+                ),
               ),
+              onChanged: (text) {},
             ),
           ),
           Expanded(

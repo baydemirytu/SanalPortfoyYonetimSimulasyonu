@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/portfolio_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/transaction_screen.dart';
 
 class ForexPriceScreen extends StatefulWidget {
@@ -92,86 +92,96 @@ class _ForexPriceScreenState extends State<ForexPriceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return const HomePage();
-              }));
-            }),
-        title: Column(
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PortfolioScreen(),
+            ));
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.white),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const PortfolioScreen();
+                }));
+              }),
+          title: Column(
+            children: [
+              Text('Fiyatlar'),
+              SizedBox(height: 8),
+              Text(
+                'Son Güncelleme: $currentTime',
+                style: TextStyle(fontSize: 12),
+              )
+            ],
+          ),
+        ),
+        body: Column(
           children: [
-            Text('Fiyatlar'),
-            SizedBox(height: 8),
-            Text(
-              'Son Güncelleme: $currentTime',
-              style: TextStyle(fontSize: 12),
-            )
+            Container(
+              padding: const EdgeInsets.all(10.0),
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                decoration: const InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: 'Döviz ismi arayın',
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                onChanged: (text) {},
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                //Fiyatlar anlik olarak cekiliyor, degerler dogru.
+                //Fiyatlarin renkleri hard coded, fikir versin diye boyle yapildi.
+                //Sonra yukselme-alcalmaya gore degisecek sekilde yapmayi planliyorum.
+                //crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  currencyCard('🇺🇸', 'USD', 'Amerikan Doları',
+                      usdPrice * 1.01, usdPrice * 0.99),
+                  currencyCard('🇪🇺', 'EUR', 'Avrupa Para Birimi',
+                      eurPrice * 1.01, eurPrice * 0.99),
+                  currencyCard('🇬🇧', 'GBP', 'İngiliz Sterlini',
+                      gbpPrice * 1.01, gbpPrice * 0.99),
+                  currencyCard('🇦🇪', 'AED', 'Bae Dirhemi', aedPrice * 1.01,
+                      aedPrice * 0.99),
+                  currencyCard('🇦🇺', 'AUD', 'Avustralya Doları',
+                      audPrice * 1.01, audPrice * 0.98),
+                  currencyCard('🇨🇦', 'CAD', 'Kanada Doları', cadPrice * 1.01,
+                      cadPrice * 0.99),
+                  currencyCard('🇨🇭', 'CHF', 'İsviçre Frangı', chfPrice * 1.01,
+                      chfPrice * 0.99),
+                  currencyCard('🇩🇰', 'DKK', 'Danimarka Kronu',
+                      dkkPrice * 1.01, dkkPrice * 0.99),
+                  currencyCard('🇯🇵', 'JPY', 'Japon Yeni', jpyPrice * 1.01,
+                      jpyPrice * 0.99),
+                  currencyCard('🇰🇼', 'KWD', 'Kuveyt Dinarı', kwdPrice * 1.01,
+                      kwdPrice * 0.99),
+                  currencyCard('🇳🇴', 'NOK', 'Norveç Kronu', nokPrice * 1.01,
+                      nokPrice * 0.99),
+                  currencyCard('🇸🇦', 'SAR', 'Arabistan  Riyali',
+                      sarPrice * 1.01, sarPrice * 0.98),
+                  currencyCard('🇸🇪', 'SEK', 'İsveç Kronu', sekPrice * 1.01,
+                      sekPrice * 0.99),
+                ],
+              ),
+            ),
           ],
         ),
-      ),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
-              style: const TextStyle(color: Colors.black),
-              decoration: const InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Döviz ismi arayın',
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (text) {},
-            ),
-          ),
-          Expanded(
-            child: ListView(
-              //Fiyatlar anlik olarak cekiliyor, degerler dogru.
-              //Fiyatlarin renkleri hard coded, fikir versin diye boyle yapildi.
-              //Sonra yukselme-alcalmaya gore degisecek sekilde yapmayi planliyorum.
-              //crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                currencyCard('🇺🇸', 'USD', 'Amerikan Doları', usdPrice * 1.01,
-                    usdPrice * 0.99),
-                currencyCard('🇪🇺', 'EUR', 'Avrupa Para Birimi',
-                    eurPrice * 1.01, eurPrice * 0.99),
-                currencyCard('🇬🇧', 'GBP', 'İngiliz Sterlini', gbpPrice * 1.01,
-                    gbpPrice * 0.99),
-                currencyCard('🇦🇪', 'AED', 'Bae Dirhemi', aedPrice * 1.01,
-                    aedPrice * 0.99),
-                currencyCard('🇦🇺', 'AUD', 'Avustralya Doları',
-                    audPrice * 1.01, audPrice * 0.98),
-                currencyCard('🇨🇦', 'CAD', 'Kanada Doları', cadPrice * 1.01,
-                    cadPrice * 0.99),
-                currencyCard('🇨🇭', 'CHF', 'İsviçre Frangı', chfPrice * 1.01,
-                    chfPrice * 0.99),
-                currencyCard('🇩🇰', 'DKK', 'Danimarka Kronu', dkkPrice * 1.01,
-                    dkkPrice * 0.99),
-                currencyCard('🇯🇵', 'JPY', 'Japon Yeni', jpyPrice * 1.01,
-                    jpyPrice * 0.99),
-                currencyCard('🇰🇼', 'KWD', 'Kuveyt Dinarı', kwdPrice * 1.01,
-                    kwdPrice * 0.99),
-                currencyCard('🇳🇴', 'NOK', 'Norveç Kronu', nokPrice * 1.01,
-                    nokPrice * 0.99),
-                currencyCard('🇸🇦', 'SAR', 'Arabistan  Riyali',
-                    sarPrice * 1.01, sarPrice * 0.98),
-                currencyCard('🇸🇪', 'SEK', 'İsveç Kronu', sekPrice * 1.01,
-                    sekPrice * 0.99),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

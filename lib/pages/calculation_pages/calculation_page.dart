@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/constants/widgets/app_bar_drawer.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/calculation_pages/doviz_hesaplama.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/calculation_pages/vadeli_mevduat_hesaplama.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/portfolio_page.dart';
 
-import '../home_page.dart';
 import 'tahvil_ve_bono_hesaplama.dart';
 
 class CalculationPage extends StatefulWidget {
@@ -21,7 +21,7 @@ class _CalculationPageState extends State<CalculationPage> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => const HomePage(),
+              builder: (context) => const PortfolioScreen(),
             ));
         return false;
       },

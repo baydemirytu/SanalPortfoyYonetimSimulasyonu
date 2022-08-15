@@ -4,6 +4,8 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/networking.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/prices_screen_crypto.dart';
 
+import '../portfolio_page.dart';
+
 //This page loads data
 class CryptoPricesLoading extends StatefulWidget {
   const CryptoPricesLoading({Key? key}) : super(key: key);
@@ -44,16 +46,26 @@ class _CryptoPricesLoadingState extends State<CryptoPricesLoading> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ModalProgressHUD(
-        inAsyncCall: true,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 100),
-              Text('Fiyatlar yükleniyor...'),
-            ],
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PortfolioScreen(),
+            ));
+        return false;
+      },
+      child: Scaffold(
+        body: ModalProgressHUD(
+          inAsyncCall: true,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 100),
+                Text('Fiyatlar yükleniyor...'),
+              ],
+            ),
           ),
         ),
       ),

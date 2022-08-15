@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/authentication_pages/main_page.dart';
-import 'package:sanal_portfoy_yonetim_simulasyonu/pages/home_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/portfolio_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/loading_screen_crypto.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/settings_page.dart';
@@ -34,14 +33,18 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text('Home'),
+            leading: const Icon(
+              Icons.assured_workload_rounded,
+              color: Colors.indigo,
+            ),
+            title: const Text('Portföy'),
             onTap: () {
               Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomePage(),
-                  ));
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const PortfolioScreen(),
+                ),
+              );
             },
           ),
           ListTile(
@@ -91,25 +94,10 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
           ),
           ListTile(
             leading: const Icon(
-              Icons.assured_workload_rounded,
-              color: Colors.indigo,
-            ),
-            title: const Text('Portfolio'),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PortfolioScreen(),
-                ),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(
               Icons.leaderboard,
               color: Colors.yellow,
             ),
-            title: const Text('Leaderboard'),
+            title: const Text('Lider Tablosu'),
             onTap: () {
               Navigator.pushReplacement(
                 context,
@@ -121,31 +109,8 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
           ),
           const Divider(height: 20, color: Colors.white, thickness: 2),
           ListTile(
-            leading: const Icon(
-              Icons.account_circle,
-              color: Colors.grey,
-            ),
-            title: const Text('Profile'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.settings,
-              color: Colors.blueGrey,
-            ),
-            title: const Text('Settings'),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SettingsPage(),
-                ),
-              );
-            },
-          ),
-          ListTile(
             leading: const Icon(Icons.power_settings_new),
-            title: const Text('Log Out'),
+            title: const Text('Çıkış Yap'),
             iconColor: Colors.red,
             onTap: () async {
               await FirebaseAuth.instance.signOut();
