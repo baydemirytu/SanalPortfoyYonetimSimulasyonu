@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/constants/widgets/app_bar_drawer.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/networking.dart';
 
 class PortfolioScreen extends StatefulWidget {
   const PortfolioScreen({Key? key}) : super(key: key);
@@ -14,11 +15,12 @@ class PortfolioScreen extends StatefulWidget {
 
 class _PortfolioScreenState extends State<PortfolioScreen> {
   final user = FirebaseAuth.instance.currentUser!;
-  final Map<String, double> portfolioElements = {};
+  final Map<String, double> dovizElements = {};
   final Map<String, dynamic> kriptoElements = {};
   final Map<String, dynamic> vadeliMevduatElements = {};
+  Map<String, double> allAssets = {};
 
-  Future getPortfolioElements() async {
+  Future getDovizElements() async {
     DocumentSnapshot variable = await FirebaseFirestore.instance
         .collection('users')
         .doc(user.uid)
@@ -26,8 +28,13 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
     var elements = variable.get('Yatırım.Döviz');
 
-    elements
-        .forEach((k, v) => v > 0 ? portfolioElements[k.toString()] = v : null);
+    elements.forEach((k, v) => v > 0 ? dovizElements[k.toString()] = v : null);
+    elements.forEach((k, v) {
+      if (v > 0) {
+        dovizElements[k.toString()] = v;
+        calculateDoviz(k);
+      }
+    });
   }
 
   Future getKriptoElements() async {
@@ -54,8 +61,27 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
             : null);
   }
 
+  Future calculateDoviz(String doviz) async {
+    NetworkHelper myNetworkHelper = NetworkHelper(
+        'https://api.exchangerate.host/convert?from=$doviz&to=TRY');
+    var dovizData = await myNetworkHelper.requestData();
+    double dovizPrice = dovizData['result'];
+    allAssets[doviz] = dovizElements[doviz]! * dovizPrice;
+  }
+
+  Future getCurrentBalance() async {
+    DocumentSnapshot userData = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    dovizElements['TRY'] = userData['Current Balance'];
+    allAssets['TRY'] = userData['Current Balance'];
+  }
+
   Future getAllAssets() async {
-    await getPortfolioElements();
+    await getCurrentBalance();
+    await getDovizElements();
     await getKriptoElements();
     await getVadeliMevduatElements();
   }
@@ -105,42 +131,22 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     return Scaffold(
       drawer: const AppBarDrawer(),
       appBar: AppBar(
-        title: const Text('Portföy'),
+        centerTitle: true,
+        title: const Text('Ana Sayfa'),
       ),
       body: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
-              style: const TextStyle(color: Colors.black),
-              decoration: const InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Döviz ismi arayın',
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (text) {},
-            ),
-          ),
           Expanded(
             child: FutureBuilder(
-              future: getPortfolioElements(),
+              future: getDovizElements(),
               builder: ((context, index) {
-                if (portfolioElements.length == 0) {
+                if (dovizElements.isEmpty) {
                   return Container();
                 } else {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: PieChart(
-                      dataMap: portfolioElements,
+                      dataMap: allAssets,
                       chartRadius: MediaQuery.of(context).size.width / 2,
                       chartType: ChartType.ring,
                       ringStrokeWidth: 16,
@@ -160,30 +166,30 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
               future: getAllAssets(),
               builder: (context, index) {
                 return ListView.builder(
-                  itemCount: portfolioElements.values.length +
+                  itemCount: dovizElements.values.length +
                       kriptoElements.values.length +
                       vadeliMevduatElements.values.length,
                   itemBuilder: ((context, index) {
-                    if (index < portfolioElements.values.length) {
+                    if (index < dovizElements.values.length) {
                       return portfolioCard(
-                        currencyEmojis[portfolioElements.keys.elementAt(index)],
-                        portfolioElements.keys.elementAt(index),
-                        currencyNames[portfolioElements.keys.elementAt(index)],
-                        portfolioElements.values.elementAt(index),
+                        currencyEmojis[dovizElements.keys.elementAt(index)],
+                        dovizElements.keys.elementAt(index),
+                        currencyNames[dovizElements.keys.elementAt(index)],
+                        dovizElements.values.elementAt(index),
                       );
                     } else if (index <
-                        portfolioElements.values.length +
+                        dovizElements.values.length +
                             kriptoElements.values.length) {
                       return kriptoCard(
-                          kriptoElements.keys.elementAt(
-                              index - portfolioElements.values.length),
-                          kriptoNames[kriptoElements.keys.elementAt(
-                              index - portfolioElements.values.length)],
-                          kriptoElements.values.elementAt(
-                              index - portfolioElements.values.length));
+                          kriptoElements.keys
+                              .elementAt(index - dovizElements.values.length),
+                          kriptoNames[kriptoElements.keys
+                              .elementAt(index - dovizElements.values.length)],
+                          kriptoElements.values
+                              .elementAt(index - dovizElements.values.length));
                     } else {
                       String key = vadeliMevduatElements.keys.elementAt(index -
-                          portfolioElements.values.length -
+                          dovizElements.values.length -
                           kriptoElements.values.length);
                       return vadeliMevduatCard(
                           currencyEmojis[key],
@@ -214,7 +220,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         ),
         title: Text(currencyCode, style: const TextStyle(color: Colors.white)),
         subtitle: Text(currencyName!),
-        trailing: Text("$owned"),
+        trailing:
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(
+            '${owned.toStringAsFixed(2)} $currencyCode',
+            style: const TextStyle(fontSize: 16),
+          ),
+          currencyCode != 'TRY'
+              ? Text('${allAssets[currencyCode]!.toStringAsFixed(2)} TRY',
+                  style: const TextStyle(fontSize: 12, color: Colors.grey))
+              : const SizedBox(),
+        ]),
       ),
     );
   }
