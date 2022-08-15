@@ -115,49 +115,53 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
       ),
       body: Column(
         children: [
-          Container(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
-              style: const TextStyle(color: Colors.black),
-              decoration: const InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                hintText: 'Döviz ismi arayın',
-                hintStyle: TextStyle(
-                  color: Colors.grey,
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(10.0),
+              child: TextField(
+                style: const TextStyle(color: Colors.black),
+                decoration: const InputDecoration(
+                  filled: true,
+                  fillColor: Colors.white,
+                  hintText: 'Döviz ismi arayın',
+                  hintStyle: TextStyle(
+                    color: Colors.grey,
                   ),
-                  borderSide: BorderSide.none,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
+                onChanged: (text) {},
               ),
-              onChanged: (text) {},
             ),
           ),
-          FutureBuilder(
-            future: getPortfolioElements(),
-            builder: ((context, index) {
-              if (portfolioElements.length == 0) {
-                return Container();
-              } else {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: PieChart(
-                    dataMap: portfolioElements,
-                    chartRadius: MediaQuery.of(context).size.width / 2,
-                    chartType: ChartType.ring,
-                    ringStrokeWidth: 16,
-                    chartValuesOptions: const ChartValuesOptions(
-                      decimalPlaces: 2,
-                      showChartValuesInPercentage: true,
-                      showChartValuesOutside: false,
+          Expanded(
+            child: FutureBuilder(
+              future: getPortfolioElements(),
+              builder: ((context, index) {
+                if (portfolioElements.length == 0) {
+                  return Container();
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: PieChart(
+                      dataMap: portfolioElements,
+                      chartRadius: MediaQuery.of(context).size.width / 2,
+                      chartType: ChartType.ring,
+                      ringStrokeWidth: 16,
+                      chartValuesOptions: const ChartValuesOptions(
+                        decimalPlaces: 2,
+                        showChartValuesInPercentage: true,
+                        showChartValuesOutside: false,
+                      ),
                     ),
-                  ),
-                );
-              }
-            }),
+                  );
+                }
+              }),
+            ),
           ),
           Expanded(
             child: FutureBuilder(
