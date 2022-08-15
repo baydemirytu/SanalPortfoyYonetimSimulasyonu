@@ -2,7 +2,7 @@
     package="com.example.sanal_portfoy_yonetim_simulasyonu">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="sanal_portfoy_yonetim_simulasyonu"
+        android:label="Sanal Portföy"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
