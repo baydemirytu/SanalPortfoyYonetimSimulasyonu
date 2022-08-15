@@ -119,7 +119,7 @@ class IntroductionPage extends StatelessWidget {
       body: IntroductionScreen(
         pages: getPages(),
         dotsDecorator: DotsDecorator(
-          size: const Size.square(10.0),
+          size: const Size.square(5.0),
           activeSize: const Size(20.0, 10.0),
           color: Colors.black26,
           spacing: const EdgeInsets.symmetric(horizontal: 3.0),
