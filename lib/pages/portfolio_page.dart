@@ -19,6 +19,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   final Map<String, dynamic> kriptoElements = {};
   final Map<String, dynamic> vadeliMevduatElements = {};
   Map<String, double> allAssets = {};
+  double malVarligi = 0;
 
   Future getDovizElements() async {
     DocumentSnapshot variable = await FirebaseFirestore.instance
@@ -28,7 +29,6 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
     var elements = variable.get('Yatırım.Döviz');
 
-    elements.forEach((k, v) => v > 0 ? dovizElements[k.toString()] = v : null);
     elements.forEach((k, v) {
       if (v > 0) {
         dovizElements[k.toString()] = v;
@@ -45,7 +45,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
 
     var elements = variable.get('Yatırım.Kripto');
 
-    elements.forEach((k, v) => v > 0 ? kriptoElements[k.toString()] = v : null);
+    elements.forEach((k, v) {
+      if (v > 0) {
+        kriptoElements[k.toString()] = v;
+        calculateKripto(k.toString());
+      }
+    });
   }
 
   Future getVadeliMevduatElements() async {
@@ -69,6 +74,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     allAssets[doviz] = dovizElements[doviz]! * dovizPrice;
   }
 
+  Future calculateKripto(String kripto) async {
+    String pathVariable = kriptoApiNames[kripto]!;
+
+    NetworkHelper myNetworkHelper = NetworkHelper(
+        'https://api.coingecko.com/api/v3/simple/price?ids=$pathVariable&vs_currencies=try');
+    var kriptoData = await myNetworkHelper.requestData();
+    var kriptoPrice = kriptoData[pathVariable]['try'];
+
+    allAssets[kripto] = kriptoElements[kripto] * kriptoPrice;
+  }
+
   Future getCurrentBalance() async {
     DocumentSnapshot userData = await FirebaseFirestore.instance
         .collection('users')
@@ -84,6 +100,10 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     await getDovizElements();
     await getKriptoElements();
     await getVadeliMevduatElements();
+
+    allAssets.forEach((key, value) {
+      malVarligi += value;
+    });
   }
 
   final Map<String?, String> currencyEmojis = {
@@ -126,6 +146,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     'BNB': 'Binance Coin',
   };
 
+  final Map<String?, String> kriptoApiNames = {
+    'BTC': 'bitcoin',
+    'ETH': 'ethereum',
+    'BNB': 'binancecoin',
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,7 +164,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         children: [
           Expanded(
             child: FutureBuilder(
-              future: getDovizElements(),
+              future: getAllAssets(),
               builder: ((context, index) {
                 if (dovizElements.isEmpty) {
                   return Container();
@@ -146,6 +172,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: PieChart(
+                      centerText: malVarligi.toStringAsFixed(2),
                       dataMap: allAssets,
                       chartRadius: MediaQuery.of(context).size.width / 2,
                       chartType: ChartType.ring,
@@ -241,7 +268,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
       child: ListTile(
         title: Text(currencyCode, style: const TextStyle(color: Colors.white)),
         subtitle: Text(currencyName!),
-        trailing: Text("$owned"),
+        trailing:
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Text(
+            '${owned.toStringAsFixed(2)} $currencyCode',
+            style: const TextStyle(fontSize: 16),
+          ),
+          currencyCode != 'TRY'
+              ? Text('${allAssets[currencyCode]!.toStringAsFixed(2)} TRY',
+                  style: const TextStyle(fontSize: 12, color: Colors.grey))
+              : const SizedBox(),
+        ]),
       ),
     );
   }
