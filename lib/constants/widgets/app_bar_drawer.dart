@@ -45,24 +45,10 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.account_circle),
-            title: const Text('Profile'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.leaderboard),
-            title: const Text('Leaderboard'),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const LeaderboardPage(),
-                ),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.calculate),
+            leading: const Icon(
+              Icons.calculate,
+              color: Colors.blueAccent,
+            ),
             title: const Text('Hesaplama'),
             onTap: () {
               Navigator.pushReplacement(
@@ -74,7 +60,10 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.attach_money),
+            leading: const Icon(
+              Icons.attach_money,
+              color: Colors.green,
+            ),
             title: const Text('Döviz'),
             onTap: () {
               Navigator.pushReplacement(
@@ -86,7 +75,10 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.currency_bitcoin),
+            leading: const Icon(
+              Icons.currency_bitcoin,
+              color: Colors.orange,
+            ),
             title: const Text('Kripto Para'),
             onTap: () {
               Navigator.pushReplacement(
@@ -98,7 +90,10 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.assured_workload_rounded),
+            leading: const Icon(
+              Icons.assured_workload_rounded,
+              color: Colors.indigo,
+            ),
             title: const Text('Portfolio'),
             onTap: () {
               Navigator.pushReplacement(
@@ -109,9 +104,35 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
               );
             },
           ),
-          const Divider(height: 20, color: Colors.white),
           ListTile(
-            leading: const Icon(Icons.settings),
+            leading: const Icon(
+              Icons.leaderboard,
+              color: Colors.yellow,
+            ),
+            title: const Text('Leaderboard'),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LeaderboardPage(),
+                ),
+              );
+            },
+          ),
+          const Divider(height: 20, color: Colors.white, thickness: 2),
+          ListTile(
+            leading: const Icon(
+              Icons.account_circle,
+              color: Colors.grey,
+            ),
+            title: const Text('Profile'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.settings,
+              color: Colors.blueGrey,
+            ),
             title: const Text('Settings'),
             onTap: () {
               Navigator.pushReplacement(
