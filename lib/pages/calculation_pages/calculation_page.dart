@@ -35,10 +35,12 @@ class _CalculationPageState extends State<CalculationPage> {
             title: const Text('Hesaplama Ekranı'),
             centerTitle: true,
             bottom: const TabBar(
+                labelColor: Colors.cyan,
+                unselectedLabelColor: Colors.white,
                 isScrollable: true,
                 indicatorWeight: 4,
                 indicatorSize: TabBarIndicatorSize.label,
-                indicatorColor: Color.fromARGB(255, 63, 101, 133),
+                indicatorColor: Colors.cyan,
                 tabs: [
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
