@@ -205,74 +205,85 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
         centerTitle: true,
         title: const Text('Sanal Portföyüm'),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: FutureBuilder(
-              future: Future.delayed(
-                  const Duration(milliseconds: 700), () => getAllAssets()),
-              builder: ((context, index) {
-                print(dovizElements);
-                print('${dovizElements.length} dovizElements.length');
-                print(kriptoElements);
-                print('${kriptoElements.length} kriptoElements.length');
-                print(allAssets);
-                print('${allAssets.length} allAssets.length');
-                print(malVarligi);
-                if (!bitti) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      SpinKitPouringHourGlass(
-                        strokeWidth: 2,
-                        color: Colors.orange,
-                        size: 60,
-                        duration: Duration(milliseconds: 1000),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        'Hazırlıyoruz...',
-                        style: TextStyle(
-                            fontSize: 25,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  );
-                } else {
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: PieChart(
-                          centerText:
-                              'Toplam:\n${malVarligi.toStringAsFixed(2)} TRY',
-                          centerTextStyle: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.black,
+      body: RefreshIndicator(
+        backgroundColor: Colors.white,
+        onRefresh: () {
+          return Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PortfolioScreen(),
+            ),
+          );
+        },
+        child: Column(
+          children: [
+            Expanded(
+              child: FutureBuilder(
+                future: Future.delayed(
+                    const Duration(milliseconds: 700), () => getAllAssets()),
+                builder: ((context, index) {
+                  print(dovizElements);
+                  print('${dovizElements.length} dovizElements.length');
+                  print(kriptoElements);
+                  print('${kriptoElements.length} kriptoElements.length');
+                  print(allAssets);
+                  print('${allAssets.length} allAssets.length');
+                  print(malVarligi);
+                  if (!bitti) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        SpinKitPouringHourGlass(
+                          strokeWidth: 2,
+                          color: Colors.orange,
+                          size: 60,
+                          duration: Duration(milliseconds: 1000),
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          'Hazırlıyoruz...',
+                          style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.white,
                               fontWeight: FontWeight.bold),
-                          dataMap: allAssets,
-                          chartRadius: MediaQuery.of(context).size.width / 2,
-                          chartType: ChartType.ring,
-                          ringStrokeWidth: 16,
-                          animationDuration: const Duration(seconds: 2),
-                          chartValuesOptions: const ChartValuesOptions(
-                            decimalPlaces: 2,
-                            showChartValuesInPercentage: true,
-                            showChartValuesOutside: false,
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: PieChart(
+                            centerText:
+                                'Toplam:\n${malVarligi.toStringAsFixed(2)} TRY',
+                            centerTextStyle: const TextStyle(
+                                fontSize: 10,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            dataMap: allAssets,
+                            chartRadius: MediaQuery.of(context).size.width / 2,
+                            chartType: ChartType.ring,
+                            ringStrokeWidth: 16,
+                            animationDuration: const Duration(seconds: 2),
+                            chartValuesOptions: const ChartValuesOptions(
+                              decimalPlaces: 2,
+                              showChartValuesInPercentage: true,
+                              showChartValuesOutside: false,
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: bitti ? getListView() : const SizedBox(),
-                      ),
-                    ],
-                  );
-                }
-              }),
+                        Expanded(
+                          child: bitti ? getListView() : const SizedBox(),
+                        ),
+                      ],
+                    );
+                  }
+                }),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
