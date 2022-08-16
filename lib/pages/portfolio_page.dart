@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/constants/widgets/app_bar_drawer.dart';
@@ -20,6 +23,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   final Map<String, dynamic> vadeliMevduatElements = {};
   Map<String, double> allAssets = {};
   double malVarligi = 0;
+  bool bitti = false;
 
   Future getDovizElements() async {
     DocumentSnapshot variable = await FirebaseFirestore.instance
@@ -96,14 +100,30 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   }
 
   Future getAllAssets() async {
+    await getKriptoElements();
+
+    kriptoElements.forEach((key, value) async {
+      while (allAssets[key] == null) {
+        await calculateKripto(key);
+      }
+    });
+
     await getCurrentBalance();
     await getDovizElements();
-    await getKriptoElements();
+
+    dovizElements.forEach((key, value) async {
+      while (allAssets[key] == null) {
+        await calculateDoviz(key);
+      }
+    });
+
     await getVadeliMevduatElements();
 
     allAssets.forEach((key, value) {
       malVarligi += value;
     });
+
+    bitti = true;
   }
 
   final Map<String?, String> currencyEmojis = {
@@ -157,78 +177,95 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     return Scaffold(
       drawer: const AppBarDrawer(),
       appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: (() {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text('UYARI'),
+                    content: const Text(
+                        'Sayfa sık sık yenilendiğinde, kullanılan farklı fiyat API\'lerinden dolayı fiyat bilgisi alınamayabilmektedir. Bu durumlarda grafikte de eksik bilgi gözükecektir.'),
+                    actions: [
+                      MaterialButton(
+                        onPressed: (() {
+                          Navigator.pop(context);
+                        }),
+                        child: const Text('Tamam'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }),
+            icon: const Icon(Icons.question_mark_outlined),
+          )
+        ],
         centerTitle: true,
-        title: const Text('Ana Sayfa'),
+        title: const Text('Sanal Portföyüm'),
       ),
       body: Column(
         children: [
           Expanded(
             child: FutureBuilder(
-              future: getAllAssets(),
+              future: Future.delayed(
+                  const Duration(milliseconds: 700), () => getAllAssets()),
               builder: ((context, index) {
-                if (dovizElements.isEmpty) {
-                  return Container();
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: PieChart(
-                      centerText: malVarligi.toStringAsFixed(2),
-                      dataMap: allAssets,
-                      chartRadius: MediaQuery.of(context).size.width / 2,
-                      chartType: ChartType.ring,
-                      ringStrokeWidth: 16,
-                      chartValuesOptions: const ChartValuesOptions(
-                        decimalPlaces: 2,
-                        showChartValuesInPercentage: true,
-                        showChartValuesOutside: false,
+                print(dovizElements);
+                print('${dovizElements.length} dovizElements.length');
+                print(kriptoElements);
+                print('${kriptoElements.length} kriptoElements.length');
+                print(allAssets);
+                print('${allAssets.length} allAssets.length');
+                print(malVarligi);
+                if (!bitti) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      SpinKitPouringHourGlass(
+                        strokeWidth: 2,
+                        color: Colors.orange,
+                        size: 60,
+                        duration: Duration(milliseconds: 1000),
                       ),
-                    ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Hazırlıyoruz...',
+                        style: TextStyle(
+                            fontSize: 25,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: PieChart(
+                          centerText:
+                              'Toplam:\n${malVarligi.toStringAsFixed(2)} TRY',
+                          dataMap: allAssets,
+                          chartRadius: MediaQuery.of(context).size.width / 2,
+                          chartType: ChartType.ring,
+                          ringStrokeWidth: 16,
+                          animationDuration: const Duration(seconds: 2),
+                          chartValuesOptions: const ChartValuesOptions(
+                            decimalPlaces: 2,
+                            showChartValuesInPercentage: true,
+                            showChartValuesOutside: false,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: bitti ? getListView() : const SizedBox(),
+                      ),
+                    ],
                   );
                 }
               }),
-            ),
-          ),
-          Expanded(
-            child: FutureBuilder(
-              future: getAllAssets(),
-              builder: (context, index) {
-                return ListView.builder(
-                  itemCount: dovizElements.values.length +
-                      kriptoElements.values.length +
-                      vadeliMevduatElements.values.length,
-                  itemBuilder: ((context, index) {
-                    if (index < dovizElements.values.length) {
-                      return portfolioCard(
-                        currencyEmojis[dovizElements.keys.elementAt(index)],
-                        dovizElements.keys.elementAt(index),
-                        currencyNames[dovizElements.keys.elementAt(index)],
-                        dovizElements.values.elementAt(index),
-                      );
-                    } else if (index <
-                        dovizElements.values.length +
-                            kriptoElements.values.length) {
-                      return kriptoCard(
-                          kriptoElements.keys
-                              .elementAt(index - dovizElements.values.length),
-                          kriptoNames[kriptoElements.keys
-                              .elementAt(index - dovizElements.values.length)],
-                          kriptoElements.values
-                              .elementAt(index - dovizElements.values.length));
-                    } else {
-                      String key = vadeliMevduatElements.keys.elementAt(index -
-                          dovizElements.values.length -
-                          kriptoElements.values.length);
-                      return vadeliMevduatCard(
-                          currencyEmojis[key],
-                          vadeliMevduatElements[key]['Anapara'],
-                          key,
-                          vadeliMevduatElements[key]['Yatırma Tarihi'],
-                          vadeliMevduatElements[key]['Vade Tarihi'],
-                          vadeliMevduatElements[key]['Net Getiri']);
-                    }
-                  }),
-                );
-              },
             ),
           ),
         ],
@@ -236,8 +273,50 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     );
   }
 
+  ListView getListView() {
+    return ListView.builder(
+      itemCount: dovizElements.values.length +
+          kriptoElements.values.length +
+          vadeliMevduatElements.values.length,
+      itemBuilder: ((context, index) {
+        if (index < dovizElements.values.length) {
+          return portfolioCard(
+            currencyEmojis[dovizElements.keys.elementAt(index)],
+            dovizElements.keys.elementAt(index),
+            currencyNames[dovizElements.keys.elementAt(index)],
+            dovizElements.values.elementAt(index),
+          );
+        } else if (index <
+            dovizElements.values.length + kriptoElements.values.length) {
+          return kriptoCard(
+              kriptoElements.keys
+                  .elementAt(index - dovizElements.values.length),
+              kriptoNames[kriptoElements.keys
+                  .elementAt(index - dovizElements.values.length)],
+              kriptoElements.values
+                  .elementAt(index - dovizElements.values.length));
+        } else {
+          String key = vadeliMevduatElements.keys.elementAt(index -
+              dovizElements.values.length -
+              kriptoElements.values.length);
+          return vadeliMevduatCard(
+              currencyEmojis[key],
+              vadeliMevduatElements[key]['Anapara'],
+              key,
+              vadeliMevduatElements[key]['Yatırma Tarihi'],
+              vadeliMevduatElements[key]['Vade Tarihi'],
+              vadeliMevduatElements[key]['Net Getiri']);
+        }
+      }),
+    );
+  }
+
   Card portfolioCard(
       String? flag, String currencyCode, String? currencyName, double owned) {
+    String tlMiktari = 'Fiyat alınamadı';
+    if (allAssets[currencyCode] != null) {
+      tlMiktari = allAssets[currencyCode]!.toStringAsFixed(2);
+    }
     return Card(
       color: Colors.black54,
       child: ListTile(
@@ -254,7 +333,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
             style: const TextStyle(fontSize: 16),
           ),
           currencyCode != 'TRY'
-              ? Text('${allAssets[currencyCode]!.toStringAsFixed(2)} TRY',
+              ? Text('$tlMiktari TRY',
                   style: const TextStyle(fontSize: 12, color: Colors.grey))
               : const SizedBox(),
         ]),
@@ -263,8 +342,12 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   }
 
   Card kriptoCard(String currencyCode, String? currencyName, double owned) {
+    String tlMiktari = 'Fiyat alınamadı';
+    if (allAssets[currencyCode] != null) {
+      tlMiktari = allAssets[currencyCode]!.toStringAsFixed(2);
+    }
     return Card(
-      color: Colors.black54,
+      color: const Color.fromARGB(255, 27, 40, 83),
       child: ListTile(
         title: Text(currencyCode, style: const TextStyle(color: Colors.white)),
         subtitle: Text(currencyName!),
@@ -275,7 +358,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
             style: const TextStyle(fontSize: 16),
           ),
           currencyCode != 'TRY'
-              ? Text('${allAssets[currencyCode]!.toStringAsFixed(2)} TRY',
+              ? Text('$tlMiktari TRY',
                   style: const TextStyle(fontSize: 12, color: Colors.grey))
               : const SizedBox(),
         ]),
