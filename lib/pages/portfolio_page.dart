@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:crypto_font_icons/crypto_font_icons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -8,6 +9,10 @@ import 'package:pie_chart/pie_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/constants/widgets/app_bar_drawer.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/networking.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/transaction_screen.dart';
+import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/transaction_screen_crypto.dart'
+    as ktr; //crypto transaction
+import 'package:flutter_svg/flutter_svg.dart';
 
 class PortfolioScreen extends StatefulWidget {
   const PortfolioScreen({Key? key}) : super(key: key);
@@ -172,6 +177,21 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     'BNB': 'binancecoin',
   };
 
+  final Map<String, Widget> kriptoIcons = {
+    'BTC': const Icon(
+      CryptoFontIcons.BTC,
+      color: Colors.orange,
+    ),
+    'ETH': const Icon(
+      CryptoFontIcons.ETH,
+      color: Colors.grey,
+    ),
+    'BNB': SvgPicture.asset(
+      'assets/icons/bnb.svg',
+      height: 26,
+    )
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -326,57 +346,201 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     );
   }
 
-  Card portfolioCard(
+  Padding portfolioCard(
       String? flag, String currencyCode, String? currencyName, double owned) {
     String tlMiktari = 'Fiyat alınamadı';
     if (allAssets[currencyCode] != null) {
       tlMiktari = allAssets[currencyCode]!.toStringAsFixed(2);
     }
-    return Card(
-      color: Colors.black54,
-      child: ListTile(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ExpansionTile(
+        backgroundColor: const Color.fromARGB(255, 43, 77, 40),
+        collapsedBackgroundColor: const Color.fromARGB(255, 43, 77, 40),
         leading: Text(
           flag!,
           style: const TextStyle(fontSize: 32),
         ),
         title: Text(currencyCode, style: const TextStyle(color: Colors.white)),
-        subtitle: Text(currencyName!),
+        subtitle: Text(
+          currencyName!,
+          style: const TextStyle(color: Colors.white),
+        ),
         trailing:
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
             '${owned.toStringAsFixed(2)} $currencyCode',
-            style: const TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16, color: Colors.white),
           ),
           currencyCode != 'TRY'
               ? Text('$tlMiktari TRY',
                   style: const TextStyle(fontSize: 12, color: Colors.grey))
               : const SizedBox(),
         ]),
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              currencyCode != 'TRY'
+                  ? dovizAlButton(currencyCode, tlMiktari)
+                  : const SizedBox(),
+              const SizedBox(
+                width: 20,
+              ),
+              currencyCode != 'TRY'
+                  ? dovizSatButton(currencyCode, tlMiktari)
+                  : const SizedBox(),
+            ],
+          ),
+        ],
       ),
     );
   }
 
-  Card kriptoCard(String currencyCode, String? currencyName, double owned) {
+  MaterialButton dovizAlButton(String currencyCode, String tlMiktari) {
+    return MaterialButton(
+        color: Colors.green,
+        onPressed: () {
+          double? buyPrice = double.tryParse(tlMiktari);
+
+          if (buyPrice != null && dovizElements[currencyCode] != null) {
+            buyPrice = buyPrice / dovizElements[currencyCode]!;
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) {
+              return TransactionScreen(currencyCode, 'alım', buyPrice!, '🪙');
+            }));
+          } else {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('HATA!'),
+                  content: Text(
+                      '$currencyCode için fiyat bilgisi alınamadı. Daha sonra tekrar deneyiniz.'),
+                );
+              },
+            );
+          }
+        },
+        child: const Text('Al', style: TextStyle(color: Colors.white)));
+  }
+
+  MaterialButton dovizSatButton(String currencyCode, String tlMiktari) {
+    return MaterialButton(
+        color: Colors.red,
+        onPressed: () {
+          double? sellPrice = double.tryParse(tlMiktari);
+
+          if (sellPrice != null && dovizElements[currencyCode] != null) {
+            sellPrice = sellPrice / dovizElements[currencyCode]!;
+            print(sellPrice);
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) {
+              return TransactionScreen(currencyCode, 'satım', sellPrice!, '🪙');
+            }));
+          } else {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('HATA!'),
+                  content: Text(
+                      '$currencyCode için fiyat bilgisi alınamadı. Daha sonra tekrar deneyiniz.'),
+                );
+              },
+            );
+          }
+        },
+        child: const Text('Sat', style: TextStyle(color: Colors.white)));
+  }
+
+  Padding kriptoCard(String currencyCode, String? currencyName, double owned) {
     String tlMiktari = 'Fiyat alınamadı';
     if (allAssets[currencyCode] != null) {
       tlMiktari = allAssets[currencyCode]!.toStringAsFixed(2);
     }
-    return Card(
-      color: const Color.fromARGB(255, 27, 40, 83),
-      child: ListTile(
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ExpansionTile(
+        leading: kriptoIcons[currencyCode],
         title: Text(currencyCode, style: const TextStyle(color: Colors.white)),
-        subtitle: Text(currencyName!),
+        subtitle:
+            Text(currencyName!, style: const TextStyle(color: Colors.white)),
         trailing:
             Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           Text(
             '${owned.toStringAsFixed(2)} $currencyCode',
-            style: const TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16, color: Colors.white),
           ),
           currencyCode != 'TRY'
               ? Text('$tlMiktari TRY',
                   style: const TextStyle(fontSize: 12, color: Colors.grey))
               : const SizedBox(),
         ]),
+        backgroundColor: const Color.fromARGB(255, 27, 40, 83),
+        collapsedBackgroundColor: const Color.fromARGB(255, 27, 40, 83),
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              MaterialButton(
+                  color: Colors.green,
+                  onPressed: () {
+                    double? buyPrice = double.tryParse(tlMiktari);
+                    if (buyPrice != null) {
+                      buyPrice = buyPrice / kriptoElements[currencyCode];
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ktr.TransactionScreen(
+                            currencyCode, 'alım', buyPrice!, '🪙');
+                      }));
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('HATA!'),
+                            content: Text(
+                                '$currencyCode için fiyat bilgisi alınamadı. Daha sonra tekrar deneyiniz.'),
+                          );
+                        },
+                      );
+                    }
+                  },
+                  child:
+                      const Text('Al', style: TextStyle(color: Colors.white))),
+              const SizedBox(
+                width: 20,
+              ),
+              MaterialButton(
+                  color: Colors.red,
+                  onPressed: () {
+                    double? sellPrice = double.tryParse(tlMiktari);
+                    if (sellPrice != null) {
+                      sellPrice = sellPrice / kriptoElements[currencyCode];
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) {
+                        return ktr.TransactionScreen(
+                            currencyCode, 'satım', sellPrice!, '🪙');
+                      }));
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('HATA!'),
+                            content: Text(
+                                '$currencyCode için fiyat bilgisi alınamadı. Daha sonra tekrar deneyiniz.'),
+                          );
+                        },
+                      );
+                    }
+                  },
+                  child:
+                      const Text('Sat', style: TextStyle(color: Colors.white))),
+            ],
+          ),
+        ],
       ),
     );
   }
