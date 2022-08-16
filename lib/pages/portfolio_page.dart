@@ -247,6 +247,10 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                         child: PieChart(
                           centerText:
                               'Toplam:\n${malVarligi.toStringAsFixed(2)} TRY',
+                          centerTextStyle: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold),
                           dataMap: allAssets,
                           chartRadius: MediaQuery.of(context).size.width / 2,
                           chartType: ChartType.ring,
