@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/portfolio_page.dart';
@@ -72,6 +73,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser!;
     return WillPopScope(
       onWillPop: () async {
         Navigator.pushReplacement(
@@ -100,7 +102,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: ListTile(
                           leading: medals[index],
-                          tileColor: Colors.black87,
+                          tileColor: user.uid != finaldocIDS[index]
+                              ? Colors.black87
+                              : Colors.yellow.shade800,
                           title: GetUserName(documentID: finaldocIDS[index]),
                         ),
                       )
@@ -108,7 +112,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: ListTile(
                           leading: Icon(Icons.person),
-                          tileColor: Colors.black87,
+                          tileColor: user.uid != finaldocIDS[index]
+                              ? Colors.black87
+                              : Colors.yellow.shade800,
                           title: GetUserName(documentID: finaldocIDS[index]),
                         ),
                       );
