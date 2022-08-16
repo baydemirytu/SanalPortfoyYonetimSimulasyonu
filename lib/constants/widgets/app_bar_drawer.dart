@@ -21,6 +21,7 @@ class _AppBarDrawerState extends State<AppBarDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: MediaQuery.of(context).size.width * 0.65,
       child: ListView(
         children: [
           DrawerHeader(

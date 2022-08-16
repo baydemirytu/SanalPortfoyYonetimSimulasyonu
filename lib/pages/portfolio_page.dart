@@ -30,6 +30,16 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
   double malVarligi = 0;
   bool bitti = false;
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    dovizElements.clear();
+    kriptoElements.clear();
+    vadeliMevduatElements.clear();
+    allAssets.clear();
+  }
+
   Future getDovizElements() async {
     DocumentSnapshot variable = await FirebaseFirestore.instance
         .collection('users')
@@ -407,7 +417,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
             buyPrice = buyPrice / dovizElements[currencyCode]!;
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) {
-              return TransactionScreen(currencyCode, 'alım', buyPrice!, '🪙');
+              return TransactionScreen(currencyCode, 'alım', buyPrice!,
+                  currencyEmojis[currencyCode]!);
             }));
           } else {
             showDialog(
@@ -436,7 +447,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
             print(sellPrice);
             Navigator.pushReplacement(context,
                 MaterialPageRoute(builder: (context) {
-              return TransactionScreen(currencyCode, 'satım', sellPrice!, '🪙');
+              return TransactionScreen(currencyCode, 'satım', sellPrice!,
+                  currencyEmojis[currencyCode]!);
             }));
           } else {
             showDialog(
