@@ -14,11 +14,13 @@ class LeaderboardPage extends StatefulWidget {
 
 class _LeaderboardPageState extends State<LeaderboardPage> {
   List<String> docIDS = [];
+  List<String> finaldocIDS = [];
+
+  Map<String, double> kullanicilarVeYuzdeler = {};
 
   Future getDocIDs() async {
     await FirebaseFirestore.instance
         .collection('users')
-        .orderBy('Initial Balance', descending: true)
         .where('On The Leader Board', isEqualTo: true)
         .get()
         .then(
@@ -28,6 +30,29 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             },
           ),
         );
+  }
+
+  Future setDocsIDSOrder() async {
+    await getDocIDs();
+    for (final id in docIDS) {
+      DocumentSnapshot variable =
+          await FirebaseFirestore.instance.collection('users').doc(id).get();
+      double yuzde =
+          (variable['Current Balance'] - variable['Initial Balance']) /
+              variable['Initial Balance'] *
+              100;
+      kullanicilarVeYuzdeler[id] = yuzde;
+    }
+    print(kullanicilarVeYuzdeler);
+
+    var sortMapByValue = Map.fromEntries(kullanicilarVeYuzdeler.entries.toList()
+      ..sort((e2, e1) => e1.value.compareTo(e2.value)));
+
+    print(sortMapByValue);
+
+    for (final a in sortMapByValue.keys) {
+      finaldocIDS.add(a);
+    }
   }
 
   var medals = [
@@ -65,10 +90,10 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
         ),
         drawer: AppBarDrawer(),
         body: FutureBuilder(
-          future: getDocIDs(),
+          future: setDocsIDSOrder(),
           builder: (context, index) {
             return ListView.builder(
-              itemCount: docIDS.length,
+              itemCount: finaldocIDS.length,
               itemBuilder: ((context, index) {
                 return index < 3
                     ? Padding(
@@ -76,7 +101,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                         child: ListTile(
                           leading: medals[index],
                           tileColor: Colors.black87,
-                          title: GetUserName(documentID: docIDS[index]),
+                          title: GetUserName(documentID: finaldocIDS[index]),
                         ),
                       )
                     : Padding(
@@ -84,7 +109,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                         child: ListTile(
                           leading: Icon(Icons.person),
                           tileColor: Colors.black87,
-                          title: GetUserName(documentID: docIDS[index]),
+                          title: GetUserName(documentID: finaldocIDS[index]),
                         ),
                       );
               }),
