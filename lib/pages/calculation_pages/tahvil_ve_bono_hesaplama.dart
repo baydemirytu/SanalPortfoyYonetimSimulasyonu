@@ -339,7 +339,7 @@ class _TahvilVeBonoState extends State<TahvilVeBono> {
                 }
               },
               child: const Text(
-                'Calculate',
+                'Hesapla',
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

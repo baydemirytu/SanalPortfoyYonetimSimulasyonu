@@ -474,7 +474,10 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ExpansionTile(
-        leading: kriptoIcons[currencyCode],
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [kriptoIcons[currencyCode]!],
+        ),
         title: Text(currencyCode, style: const TextStyle(color: Colors.white)),
         subtitle:
             Text(currencyName!, style: const TextStyle(color: Colors.white)),
