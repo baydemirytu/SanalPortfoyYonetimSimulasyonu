@@ -16,9 +16,9 @@ class CryptoPriceScreen extends StatefulWidget {
 }
 
 class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
-  late double btcPrice;
-  late double ethPrice;
-  late double bnbPrice;
+  late double btcPrice = 0;
+  late double ethPrice = 0;
+  late double bnbPrice = 0;
   late String currentTime;
 
   final Map<String, Widget> cryptoIcons = {
@@ -44,11 +44,10 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
   }
 
   updatePrices(dynamic btcData, ethData, bnbData, curTime) {
-    print(btcData['bitcoin']['try']);
-    btcPrice = btcData['bitcoin']['try'].toDouble();
-    ethPrice = ethData['ethereum']['try'].toDouble();
-    bnbPrice = bnbData['binancecoin']['try'].toDouble();
-    ;
+    btcPrice = btcData['bitcoin']['try'].toDouble()!;
+    ethPrice = ethData['ethereum']['try'].toDouble()!;
+    bnbPrice = bnbData['binancecoin']['try'].toDouble()!;
+
     currentTime = curTime;
   }
 
@@ -135,7 +134,8 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
                   currencyCard(
                       SvgPicture.asset(
                         'assets/icons/bnb.svg',
-                        height: 26,
+                        height: 24,
+                        width: 24,
                       ),
                       'BNB',
                       'Binance Coin',

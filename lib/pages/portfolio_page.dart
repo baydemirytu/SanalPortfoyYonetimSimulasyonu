@@ -198,9 +198,17 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
     ),
     'BNB': SvgPicture.asset(
       'assets/icons/bnb.svg',
-      height: 26,
-    )
+      height: 24,
+      width: 24,
+    ),
   };
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAllAssets();
+  }
 
   @override
   Widget build(BuildContext context) {
