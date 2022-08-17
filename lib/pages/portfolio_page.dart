@@ -258,7 +258,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
             Expanded(
               child: FutureBuilder(
                 future: Future.delayed(
-                    const Duration(milliseconds: 700), () => getAllAssets()),
+                  const Duration(milliseconds: 1500),
+                ),
                 builder: ((context, index) {
                   print(dovizElements);
                   print('${dovizElements.length} dovizElements.length');
