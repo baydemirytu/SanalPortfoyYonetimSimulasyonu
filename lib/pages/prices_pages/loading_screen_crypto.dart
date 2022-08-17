@@ -19,15 +19,17 @@ class _CryptoPricesLoadingState extends State<CryptoPricesLoading> {
 
   void getCurrencyData() async {
     choosenPair = 'BTC';
-    NetworkHelper myNetworkHelper =
-        NetworkHelper('https://rest.coinapi.io/v1/exchangerate');
-    var btcData = await myNetworkHelper.requestCoinData(choosenPair, 'TRY');
+    NetworkHelper myNetworkHelper = NetworkHelper(
+        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=try');
+    var btcData = await myNetworkHelper.requestData();
     choosenPair = 'ETH';
-    myNetworkHelper = NetworkHelper('https://rest.coinapi.io/v1/exchangerate');
-    var ethData = await myNetworkHelper.requestCoinData(choosenPair, 'TRY');
+    myNetworkHelper = NetworkHelper(
+        'https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=try');
+    var ethData = await myNetworkHelper.requestData();
     choosenPair = 'BNB';
-    myNetworkHelper = NetworkHelper('https://rest.coinapi.io/v1/exchangerate');
-    var bnbData = await myNetworkHelper.requestCoinData(choosenPair, 'TRY');
+    myNetworkHelper = NetworkHelper(
+        'https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=try');
+    var bnbData = await myNetworkHelper.requestData();
     /*****/
     DateTime now = new DateTime.now();
     var formatter = new DateFormat.Hm();

@@ -1,4 +1,6 @@
+import 'package:crypto_font_icons/crypto_font_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/portfolio_page.dart';
 import 'package:sanal_portfoy_yonetim_simulasyonu/pages/prices_pages/transaction_screen_crypto.dart';
 
@@ -19,6 +21,21 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
   late double bnbPrice;
   late String currentTime;
 
+  final Map<String, Widget> cryptoIcons = {
+    'BTC': const Icon(
+      CryptoFontIcons.BTC,
+      color: Colors.orange,
+    ),
+    'ETH': const Icon(
+      CryptoFontIcons.ETH,
+      color: Colors.grey,
+    ),
+    'BNB': SvgPicture.asset(
+      'assets/icons/bnb.svg',
+      height: 26,
+    )
+  };
+
   @override
   void initState() {
     super.initState();
@@ -27,9 +44,11 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
   }
 
   updatePrices(dynamic btcData, ethData, bnbData, curTime) {
-    btcPrice = btcData['rate'];
-    ethPrice = ethData['rate'];
-    bnbPrice = bnbData['rate'];
+    print(btcData['bitcoin']['try']);
+    btcPrice = btcData['bitcoin']['try'].toDouble();
+    ethPrice = ethData['ethereum']['try'].toDouble();
+    bnbPrice = bnbData['binancecoin']['try'].toDouble();
+    ;
     currentTime = curTime;
   }
 
@@ -96,10 +115,31 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
                 //crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   currencyCard(
-                      '', 'BTC', 'Bitcoin', btcPrice * 1.01, btcPrice * 0.99),
+                      const Icon(
+                        CryptoFontIcons.BTC,
+                        color: Colors.orange,
+                      ),
+                      'BTC',
+                      'Bitcoin',
+                      btcPrice * 1.01,
+                      btcPrice * 0.99),
                   currencyCard(
-                      '', 'ETH', 'Ethereum', ethPrice * 1.01, ethPrice * 0.99),
-                  currencyCard('', 'BNB', 'Binance Coin', bnbPrice * 1.01,
+                      const Icon(
+                        CryptoFontIcons.ETH,
+                        color: Colors.grey,
+                      ),
+                      'ETH',
+                      'Ethereum',
+                      ethPrice * 1.01,
+                      ethPrice * 0.99),
+                  currencyCard(
+                      SvgPicture.asset(
+                        'assets/icons/bnb.svg',
+                        height: 26,
+                      ),
+                      'BNB',
+                      'Binance Coin',
+                      bnbPrice * 1.01,
                       bnbPrice * 0.99)
                 ],
               ),
@@ -110,11 +150,17 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
     );
   }
 
-  Card currencyCard(String flag, String currencyCode, String currencyName,
+  Card currencyCard(Widget coinIcon, String currencyCode, String currencyName,
       double buyPrice, double sellPrice) {
     return Card(
       color: Colors.black54,
       child: ListTile(
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            coinIcon,
+          ],
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
