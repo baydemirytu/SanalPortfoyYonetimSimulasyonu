@@ -10,7 +10,7 @@ class TransactionScreen extends StatefulWidget {
   final double currencyRate;
   final String currencyType;
   final String transactionType;
-  final String currencyFlag;
+  final Widget currencyFlag;
 
   @override
   State<TransactionScreen> createState() => _TransactionScreenState();
@@ -20,8 +20,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
   late double currencyRate;
   late String currencyType;
   late String transactionType;
-  late String currencyFlag;
-  late String shownFlag;
+  late Widget currencyFlag;
+  late Widget shownFlag;
   late String shownType;
 
   Color? tryColor = Colors.grey[700];
@@ -101,7 +101,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
                           setState(() {
                             excColor = Colors.grey[700];
                             tryColor = Colors.black;
-                            shownFlag = '🇹🇷';
+                            shownFlag = const Text(
+                              '🇹🇷',
+                              style: TextStyle(fontSize: 24),
+                            );
                             shownType = 'TRY';
                           });
                         },
@@ -122,10 +125,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                   filled: true,
-                  icon: Text(
-                    shownFlag,
-                    style: const TextStyle(fontSize: 32),
-                  ),
+                  icon: shownFlag,
                   fillColor: Colors.white,
                   hintText: '$shownType cinsinden tutar giriniz',
                   hintStyle: const TextStyle(

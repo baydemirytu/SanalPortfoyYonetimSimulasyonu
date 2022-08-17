@@ -506,8 +506,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                       buyPrice = buyPrice / kriptoElements[currencyCode];
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) {
-                        return ktr.TransactionScreen(
-                            currencyCode, 'alım', buyPrice!, '🪙');
+                        return ktr.TransactionScreen(currencyCode, 'alım',
+                            buyPrice!, kriptoIcons[currencyCode]!);
                       }));
                     } else {
                       showDialog(
@@ -535,8 +535,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                       sellPrice = sellPrice / kriptoElements[currencyCode];
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) {
-                        return ktr.TransactionScreen(
-                            currencyCode, 'satım', sellPrice!, '🪙');
+                        return ktr.TransactionScreen(currencyCode, 'satım',
+                            sellPrice!, kriptoIcons[currencyCode]!);
                       }));
                     } else {
                       showDialog(

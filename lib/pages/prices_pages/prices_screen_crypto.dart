@@ -171,7 +171,7 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return TransactionScreen(
-                          currencyCode, 'Alım', buyPrice, '🪙');
+                          currencyCode, 'Alım', buyPrice, coinIcon);
                     }));
                     print(
                         'Kullanici $buyPrice dan $currencyCode almak istiyor');
@@ -200,7 +200,7 @@ class _CryptoPriceScreenState extends State<CryptoPriceScreen> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return TransactionScreen(
-                          currencyCode, 'Satım', sellPrice, '🪙');
+                          currencyCode, 'Satım', sellPrice, coinIcon);
                     }));
                     print(
                         'Kullanici $sellPrice dan $currencyCode satmak istiyor');
