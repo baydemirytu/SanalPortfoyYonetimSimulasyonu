@@ -292,7 +292,8 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                     return Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(
+                              top: 35, right: 16, left: 16, bottom: 16),
                           child: PieChart(
                             centerText:
                                 'Toplam:\n${malVarligi.toStringAsFixed(2)} TRY',
@@ -308,7 +309,7 @@ class _PortfolioScreenState extends State<PortfolioScreen> {
                             chartValuesOptions: const ChartValuesOptions(
                               decimalPlaces: 2,
                               showChartValuesInPercentage: true,
-                              showChartValuesOutside: false,
+                              showChartValuesOutside: true,
                             ),
                           ),
                         ),
