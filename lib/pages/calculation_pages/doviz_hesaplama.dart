@@ -173,140 +173,142 @@ class _DovizHesaplamaState extends State<DovizHesaplama> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  child: TextField(
-                    controller: miktarController,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    decoration: InputDecoration(
-                      icon: const Icon(
-                        Icons.payments_outlined,
-                        color: Colors.greenAccent,
-                      ),
-                      labelText: 'Miktar',
-                      hintText: 'Örnek: 100000',
-                      enabledBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 2, color: Colors.blue),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(width: 2, color: Colors.red),
-                        borderRadius: BorderRadius.circular(15),
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: TextField(
+                      controller: miktarController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      decoration: InputDecoration(
+                        icon: const Icon(
+                          Icons.payments_outlined,
+                          color: Colors.greenAccent,
+                        ),
+                        labelText: 'Miktar',
+                        hintText: 'Örnek: 100000',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 2, color: Colors.blue),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(width: 2, color: Colors.red),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Text('${currencyEmojis[dropdownValue]}'),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 4, horizontal: 8),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey, width: 1),
-                            borderRadius: BorderRadius.circular(15)),
-                        child: DropdownButton<String>(
-                          value: dropdownValue,
-                          icon: const Icon(Icons.arrow_downward),
-                          elevation: 16,
-                          style: const TextStyle(color: Colors.white),
-                          underline: Container(
-                            height: 0,
-                          ),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              dropdownValue = newValue!;
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Text('${currencyEmojis[dropdownValue]}'),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 8),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey, width: 1),
+                              borderRadius: BorderRadius.circular(15)),
+                          child: DropdownButton<String>(
+                            value: dropdownValue,
+                            icon: const Icon(Icons.arrow_downward),
+                            elevation: 16,
+                            style: const TextStyle(color: Colors.white),
+                            underline: Container(
+                              height: 0,
+                            ),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                dropdownValue = newValue!;
 
-                              switch (dropdownValue) {
-                                case 'TRY':
-                                  selectedDoviz = lira;
-                                  break;
-                                case 'USD':
-                                  selectedDoviz = dolar;
-                                  break;
-                                case 'EUR':
-                                  selectedDoviz = euro;
-                                  break;
-                                case 'GBP':
-                                  selectedDoviz = pound;
-                                  break;
-                                case 'AED':
-                                  selectedDoviz = aed;
-                                  break;
-                                case 'AUD':
-                                  selectedDoviz = aud;
-                                  break;
-                                case 'CAD':
-                                  selectedDoviz = cad;
-                                  break;
-                                case 'CHF':
-                                  selectedDoviz = chf;
-                                  break;
-                                case 'DKK':
-                                  selectedDoviz = dkk;
-                                  break;
-                                case 'JPY':
-                                  selectedDoviz = jpy;
-                                  break;
-                                case 'KWD':
-                                  selectedDoviz = kwd;
-                                  break;
-                                case 'NOK':
-                                  selectedDoviz = nok;
-                                  break;
-                                case 'SAR':
-                                  selectedDoviz = sar;
-                                  break;
-                                case 'SEK':
-                                  selectedDoviz = sek;
-                                  break;
-
-                                default:
-                                  {
+                                switch (dropdownValue) {
+                                  case 'TRY':
                                     selectedDoviz = lira;
-                                  }
-                              }
-                            });
-                          },
-                          items: dovizList,
+                                    break;
+                                  case 'USD':
+                                    selectedDoviz = dolar;
+                                    break;
+                                  case 'EUR':
+                                    selectedDoviz = euro;
+                                    break;
+                                  case 'GBP':
+                                    selectedDoviz = pound;
+                                    break;
+                                  case 'AED':
+                                    selectedDoviz = aed;
+                                    break;
+                                  case 'AUD':
+                                    selectedDoviz = aud;
+                                    break;
+                                  case 'CAD':
+                                    selectedDoviz = cad;
+                                    break;
+                                  case 'CHF':
+                                    selectedDoviz = chf;
+                                    break;
+                                  case 'DKK':
+                                    selectedDoviz = dkk;
+                                    break;
+                                  case 'JPY':
+                                    selectedDoviz = jpy;
+                                    break;
+                                  case 'KWD':
+                                    selectedDoviz = kwd;
+                                    break;
+                                  case 'NOK':
+                                    selectedDoviz = nok;
+                                    break;
+                                  case 'SAR':
+                                    selectedDoviz = sar;
+                                    break;
+                                  case 'SEK':
+                                    selectedDoviz = sek;
+                                    break;
+
+                                  default:
+                                    {
+                                      selectedDoviz = lira;
+                                    }
+                                }
+                              });
+                            },
+                            items: dovizList,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            buildListTile(currencyEmojis['TRY'], 'TRY', lira),
-            buildListTile(currencyEmojis['USD'], 'USD', dolar),
-            buildListTile(currencyEmojis['EUR'], 'EUR', euro),
-            buildListTile(currencyEmojis['GBP'], 'GBP', pound),
-            buildListTile(currencyEmojis['AED'], 'AED', aed),
-            buildListTile(currencyEmojis['AUD'], 'AUD', aud),
-            buildListTile(currencyEmojis['CAD'], 'CAD', cad),
-            buildListTile(currencyEmojis['CHF'], 'CHF', chf),
-            buildListTile(currencyEmojis['DKK'], 'DKK', dkk),
-            buildListTile(currencyEmojis['JPY'], 'JPY', jpy),
-            buildListTile(currencyEmojis['KWD'], 'KWD', kwd),
-            buildListTile(currencyEmojis['NOK'], 'NOK', nok),
-            buildListTile(currencyEmojis['SAR'], 'SAR', sar),
-            buildListTile(currencyEmojis['SEK'], 'SEK', sek),
-          ],
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              buildListTile(currencyEmojis['TRY'], 'TRY', lira),
+              buildListTile(currencyEmojis['USD'], 'USD', dolar),
+              buildListTile(currencyEmojis['EUR'], 'EUR', euro),
+              buildListTile(currencyEmojis['GBP'], 'GBP', pound),
+              buildListTile(currencyEmojis['AED'], 'AED', aed),
+              buildListTile(currencyEmojis['AUD'], 'AUD', aud),
+              buildListTile(currencyEmojis['CAD'], 'CAD', cad),
+              buildListTile(currencyEmojis['CHF'], 'CHF', chf),
+              buildListTile(currencyEmojis['DKK'], 'DKK', dkk),
+              buildListTile(currencyEmojis['JPY'], 'JPY', jpy),
+              buildListTile(currencyEmojis['KWD'], 'KWD', kwd),
+              buildListTile(currencyEmojis['NOK'], 'NOK', nok),
+              buildListTile(currencyEmojis['SAR'], 'SAR', sar),
+              buildListTile(currencyEmojis['SEK'], 'SEK', sek),
+            ],
+          ),
         ),
       ),
     );
