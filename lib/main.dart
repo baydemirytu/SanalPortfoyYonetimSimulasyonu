@@ -65,7 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: const [
               Text(
-                'SGMK',
+                'Sanal Portföy Yönetim Uygulaması',
                 style: TextStyle(fontSize: 40),
               ),
               Text('Devam etmek için dokunun...')
