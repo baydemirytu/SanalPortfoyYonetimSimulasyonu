@@ -64,9 +64,13 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: const [
-              Text(
-                'Sanal Portföy Yönetim Uygulaması',
-                style: TextStyle(fontSize: 40),
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  'Sanal Portföy Yönetim Uygulaması',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 40),
+                ),
               ),
               Text('Devam etmek için dokunun...')
             ],
